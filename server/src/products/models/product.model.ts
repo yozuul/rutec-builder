@@ -1,16 +1,22 @@
+import {BOOLEAN} from 'sequelize';
 import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
-import {Area} from 'src/areas/models/area.model';
-import { Subscribe } from 'src/subscribes/models/subscribe.model';
 
 const { INTEGER, STRING } = DataType
 
-interface ChannelCreationAttrs {
+interface ProductCreationAttrs {
    name: string
-   tgId: string
+   url: string
+   recText: string
+   fields: string
+   orFields: string
+   notOrFields: string
+   prioriteFields: string
+   prioriteOrFields: string
+   exception: boolean
 }
 
-@Table({ tableName: 'channels' })
-export class Channel extends Model<Channel, ChannelCreationAttrs> {
+@Table({ tableName: 'products' })
+export class Product extends Model<Product, ProductCreationAttrs> {
    @Column({
       type: INTEGER,
       unique: true, autoIncrement: true, primaryKey: true
@@ -21,9 +27,41 @@ export class Channel extends Model<Channel, ChannelCreationAttrs> {
    }) name: string
 
    @Column({
-      type: STRING, allowNull: true
-   }) tgId: string
+      type: STRING, allowNull: false
+   }) url: string
 
-   @BelongsToMany(() => Area, () => Subscribe)
-   areas: Area[]
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) recText: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) fields: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) orFields: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) notFields: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) notOrFields: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) prioriteFields: string
+
+   @Column({
+      type: STRING, allowNull: true, defaultValue: null
+   }) prioriteOrFields: string
+
+   @Column({
+      type: BOOLEAN, allowNull: true, defaultValue: null
+   }) exception: boolean
+
+   // @BelongsToMany(() => Area, () => Subscribe)
+   // areas: Area[]
 }

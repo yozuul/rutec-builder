@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+ul[class], ol[class] {
+  padding: 0;
+}
+body, h1, h2, h3, h4, p, ul[class], ol[class], li, figure, figcaption, blockquote, dl, dd {
+  margin: 0;
+}
+h2, h3, h4 {
+}
+.anketa_wrapper  h1 {
+  font-size: 60px;
+  line-height: 3.5rem;
+  margin-bottom: 15px;
+}
+body {
+  font-weight: 500;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  font-size: 14px;
+  overflow-x: hidden;
+  color: #303133;
+}
+body.overflow {
+   overflow-y: hidden;
+ }
+body, input, button {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+p {
+  margin-bottom: .4rem;
+}
+a {
+  /* text-decoration: none; */
+  color: #303133;
+}
+.el-card.is-always-shadow {
+  box-shadow: none !important;
+}
+/* main {
+  max-width: 1100px;
+} */

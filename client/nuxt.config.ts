@@ -1,15 +1,21 @@
+import { resolve } from 'path'
 export default defineNuxtConfig({
-  ssr: false,
-  // typescript: { shim: false },
-  modules: [
-     '@pinia/nuxt', '@element-plus/nuxt'
+   ssr: false,
+   srcDir: './src',
+   alias: {
+      styles: resolve('./src/assets/styles/'),
+      utils: resolve('./src/utils'),
+      data: resolve('./src/assets/data')
+   },
+   modules: [
+      '@pinia/nuxt', '@element-plus/nuxt'
    ],
-   buildModules: [
-      [ '@pinia/nuxt',
-      { autoImports: [
-         'defineStore',  ['defineStore', 'definePiniaStore'],
-      ]}],
-   ],
+   pinia: {
+      autoImports: [
+         'defineStore',
+         ['defineStore', 'definePiniaStore'],
+      ],
+   },
    css: [
       '~/assets/styles/reset.css'
    ],
@@ -24,7 +30,7 @@ export default defineNuxtConfig({
                content: 'ElementPlus + Nuxt3',
             },
          ],
-         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+         link: [{ rel: 'icon', type: 'image/x-icon', href: '/src/public/favicon.png' }],
       }
    },
 })
