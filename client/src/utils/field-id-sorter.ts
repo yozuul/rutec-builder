@@ -38,42 +38,6 @@ export const getFieldsId = (inputs: any, selectors: any) => {
          }
       }
    })
-   // for (let selectorFields of selectors) {
-   //    // console.log(index)
-   //    // При добавлении в пустой массив рандомного индекса, получаем пустые значения, отсеиваем их
-   //    if(selectorFields) {
-   //       // console.log('selectorFields', selectorFields)
-   //       // Получаем индекс текущего значения массива (то, что заполнил пользователь)
-   //       const signIndex = selectors.indexOf(selectorFields)
-   //       // console.log('signIndex', signIndex, typeof signIndex)
-   //       // Этот индекс будет соотвествовать индексу в массиве всех имеющихся признаков
-   //       const fieldGroup = signs.find(group => group.id === signIndex)
-   //       // console.log('fieldGroup', fieldGroup)
-   //       // console.log(fieldGroup)
-   //       // Перебираем внутри группы имеющиеся поля
-   //       for (let existField of fieldGroup.fields) {
-   //          // Если тип группы чекбокс, то в значении может быть массив, перебираем его тоже
-   //          const arrItem = {
-   //             fieldGroup: fieldGroup.part,
-   //             fieldId: existField.id, fieldName: existField.name,
-   //             prioret: existField.prorite ? true : false
-   //          }
-   //          if(typeof selectorFields === 'object') {
-   //             for (let selectorField of selectorFields) {
-   //                // Сравниваем значение полей группы с тем, что указал пользователь
-   //                if(selectorField === existField.name) {
-   //                   // Если сходятся, пушим
-   //                   ids.push(arrItem)
-   //                }
-   //             }
-   //          } else {
-   //             // Если это radio селектор, то значение будет string и перебирать ничего не надо
-   //             if(selectorFields === existField.name) {
-   //                ids.push(arrItem)
-   //             }
-   //          }
-   //       }
-   //    }
-   // }
+   console.log(ids)
    return ids
 }

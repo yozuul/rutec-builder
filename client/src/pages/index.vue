@@ -2,7 +2,10 @@
 <main class="anketa_wrapper">
    <div class="anketa">
       <div v-for="(fieldGroup, index) in signs" :key="index"
-         :class="['optionsGroup', {'inputs': fieldGroup.type === 'input'}]"
+         :class="['optionsGroup', {
+            inputs: fieldGroup.type === 'input',
+            disable: selectorsNotActive
+         }, 'groupId_' + fieldGroup.id]"
       >
          <h3>{{ fieldGroup.name }}</h3>
          <!-- <h3>{{ fieldGroup.name }}<sup v-if="fieldGroup.required"> * </sup></h3> -->
@@ -101,6 +104,7 @@ const selectors = ref([])
 const inputs = ref([])
 const btnRecomendationActive = ref(false)
 const recomendationBtnDanger = ref(false)
+const selectorsNotActive = ref(false)
 const promoEmail = ref(null)
 const isDisabled = computed(() => !promoEmail.value)
 const recomendationText = ref('РЕКОМЕНДАЦИИ')
@@ -128,8 +132,14 @@ function goToPage() {
    }
 }
 function seeRecomendation(recomended, fields) {
-   const badSigns = [7,8,9,10,11,12,13,14,15]
    // console.log(recomended)
+   const badSigns = [7,8,9,10,11,12,13,14,15]
+   const isException = fields.find(field => field.fieldId === 16)
+   if(isException) {
+      recomendationText.value = 'РЕКОМЕНДАЦИИ'
+      btnRecomendationActive.value = false
+      return
+   }
    if(recomended.length > 0) {
       let allRecomended = ''
       let prioriteRecomended = ''
@@ -149,8 +159,15 @@ function seeRecomendation(recomended, fields) {
             if(checkNumber.length > 1) {
                prioriteRecomended = product.name
                urlToGo.value = product.url
-            } else {
-               recomendationText.value = 'РЕКОМЕНДАЦИИ'
+            }
+            if(checkNumber.length === 1) {
+               for (let { fieldId } of fields) {
+                  if(fieldId === 10 || fieldId === 11 || fieldId === 12 || fieldId === 13) {
+                     allRecomended = product.name
+                     urlToGo.value = product.url
+                     productToGo.value = product
+                  }
+               }
             }
          }
       }
@@ -170,9 +187,28 @@ function seeRecomendation(recomended, fields) {
    else {
       recomendationText.value = 'РЕКОМЕНДАЦИИ'
    }
+   console.log(fields)
 }
 async function handleBtnProductCheck() {
+   selectorsNotActive.value = false
    console.log('\n---\n')
+   if(selectors.value[111]) {
+      if(JSON.stringify(selectors.value[111]).length !== 2) {
+         selectorsNotActive.value = true
+         console.log(selectors.value[111])
+         const errorGroup = [2,3,4,5]
+         for (let [index, item] of selectors.value.entries()) {
+            console.log('index:', index, item)
+         }
+         for (let badId of errorGroup) {
+            // selectors.value.splice(badId, 1)
+            selectors.value[badId] = undefined
+         }
+      } else {
+         selectors.value.splice(111, 1)
+         selectorsNotActive.value = false
+      }
+   }
    // console.log('USERS INPUTS:', inputs.value)
    // console.log('USERS SELECTORS:', selectors.value)
    const activate = {
@@ -209,6 +245,7 @@ async function handleBtnProductCheck() {
    console.log('recomended', recomended)
    seeRecomendation(recomended, fields)
 }
+
 function checkDanger(fieldName, dnagerIds) {
    let danger = false
    signs.map((group) =>  {
@@ -262,5 +299,13 @@ onMounted(() => {
 @import 'styles/main.scss';
 #message_3 {
    max-width: 300px;
+}
+.groupId_2, .groupId_3, .groupId_4, .groupId_5 {
+   &.disable {
+      opacity: .5;
+      * {
+         cursor: default;
+      }
+   }
 }
 </style>

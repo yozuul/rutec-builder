@@ -142,7 +142,7 @@ export const products = [
          { id: 1, value: '1.0<x<2.5' },
          { id: 45 },
       ],
-      orFields: [33,35],
+      prioriteOrFields: [33,35],
       notOrFields: [7,8,9,10,11,12,13,14,15,16,45]
    },
    {
@@ -152,7 +152,7 @@ export const products = [
          { id: 1, value: '2.51<x<5.5' },
          { id: 45 },
       ],
-      orFields: [33,35],
+      prioriteOrFields: [33,35],
       notOrFields: [7,8,9,10,11,12,13,14,15,16,45]
    },
    // --------------------------------------
@@ -329,5 +329,17 @@ export const products = [
       fields: [
          { id: 28 }
       ]
+   },
+   {
+      name: '"Мастер концетрат',
+      url: 'https://rutec-shop.ru/master',
+      fields: [
+         {"id":19,"value":null},{"id":21,"value":null},{"id":23,"value":null},{"id":25,"value":null},{"id":27,"value":null}
+      ]
+   },
+   {
+      name: '"Мастер концетрат',
+      url: 'https://rutec-shop.ru/master',
+      orFields: [37,38]
    },
 ]

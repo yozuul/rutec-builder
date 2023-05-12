@@ -24,21 +24,9 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
       // Проверка обязательных полей
       // if(product.id !== 1) return
       if (product.fields && product.fields.length > 0) {
-        if(product.id === 41) {
-          // console.log(fieldsData)
-        }
-
         for (let field of product.fields) {
           // Проверка, что все обязательные поля из товара присутствуют в анкете
           const fieldData = fieldsData.find(data => data.fieldId === field.id);
-          if(product.id === 41) {
-            // console.log(fieldsData)
-            console.log(field.id)
-            // console.log('fieldData', fieldData)
-            // console.log(product.fields)
-            // console.log(field.value)
-            // console.log(fieldData)
-          }
           if (!fieldData) {
             return false;
           }
