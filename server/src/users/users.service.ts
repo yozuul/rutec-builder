@@ -23,21 +23,17 @@ export class UsersService {
          promocode: promocode
       })
    }
-   async login(data) {
+   async findByLogin(userLogin) {
+      return this.userRepository.findOne({
+         where: { email: userLogin }
+      })
+   }
+   async defaulUser() {
       const allUsers = await this.allUsers()
       if(allUsers.length === 0) {
          await this.addUser({
             name: 'Денис', email: 'yozuul@yandex.ru', password: '123', role: 'admin'
          })
       }
-      const user = await this.userRepository.findOne({
-         where: { [Op.and]: [
-               { email: data.email },
-               { password: data.password },
-            ]
-         }
-      })
-      console.log(user)
-      return user
    }
 }

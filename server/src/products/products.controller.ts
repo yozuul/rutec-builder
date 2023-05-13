@@ -9,6 +9,7 @@ export class ProductsController {
 
    @Get('all')
    async getAllProducts() {
+      console.log('ddd')
       return this.productService.getAllProducts()
    }
    @Get('byId/:id')

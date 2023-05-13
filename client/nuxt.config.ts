@@ -1,11 +1,15 @@
 import { resolve } from 'path'
 export default defineNuxtConfig({
-   ssr: false,
+   // ssr: false,
+   routeRules: {
+     '/': { static: true },
+     '/admin/**': { ssr: false },
+   },
    srcDir: './src',
    alias: {
       styles: resolve('./src/assets/styles/'),
-      utils: resolve('./src/utils'),
-      data: resolve('./src/assets/data')
+      utils:  resolve('./src/utils'),
+      data:   resolve('./src/assets/data')
    },
    modules: [
       '@pinia/nuxt', '@element-plus/nuxt'

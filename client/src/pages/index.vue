@@ -290,7 +290,7 @@ async function getPromo() {
       })
    }
 }
-onMounted(() => {
+onMounted(async () => {
    // handleCheckRecomendation(signs, data)
 })
 </script>

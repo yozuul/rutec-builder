@@ -10,11 +10,6 @@ body, h1, h2, h3, h4, p, ul[class], ol[class], li, figure, figcaption, blockquot
 }
 h2, h3, h4 {
 }
-.anketa_wrapper  h1 {
-  font-size: 60px;
-  line-height: 3.5rem;
-  margin-bottom: 15px;
-}
 body {
   font-weight: 500;
   min-height: 100vh;

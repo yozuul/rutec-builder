@@ -1,8 +1,22 @@
 .anketa_wrapper {
-   display: flex;
    max-width: 1430px;
    margin: auto;
    padding: 0 15px 0 15px;
+   h1 {
+      font-size: 40px;
+      line-height: 2.5rem;
+      margin-bottom: 15px;
+   }
+   @media (min-width: 1400px) {
+      h1 {
+         font-size: 60px;
+         line-height: 3.5rem;
+         margin-bottom: 15px;
+      }
+   }
+   @media (min-width: 1400px) {
+      display: flex;
+   }
 }
 .anketa {
    max-width: 750px;
@@ -11,33 +25,50 @@
    flex-wrap: wrap;
    padding-top: 30px;
    position: relative;
-   padding-bottom: 80px;
+   @media (min-width: 1400px) {
+      padding-bottom: 80px;
+   }
    sup {
       color: red;
    }
 }
 .anketaText {
-   padding-top: 30px;
+   @media (min-width: 1400px) {
+      padding-top: 30px;
+   }
 }
 .promoBlock {
-   display: flex;
-   flex-wrap: wrap;
    position: relative;
+   margin-bottom: 80px;
+   @media (min-width: 1400px) {
+      display: flex;
+      flex-wrap: wrap;
+   }
    h3 {
       margin: 15px 0 10px 0;
       width: 100%;
    }
    .getPromoInput {
-      max-width: 220px;
+      max-width: 300px;
+      margin: 0 15px 15px 0;
+      @media (min-width: 1400px) {
+         max-width: 220px;
+      }
    }
    .getPromoBtn {
-      margin-left: 15px;
+      @media (min-width: 1400px) {
+         // margin: 15px;
+      }
    }
 }
 .rutecLogo {
    position: absolute;
-   right: 120px;
-   bottom: -25px;
+   right: 0;
+   bottom: 10px;
+   @media (min-width: 1400px) {
+      right: 120px;
+      bottom: -25px;
+   }
 }
 .optionsGroup {
    width: 100%;

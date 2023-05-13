@@ -10,6 +10,7 @@ import { Product } from './products/models/product.model';
 import { Settings } from './products/models/settings.model';
 import { UsersModule } from './users/users.module';
 import { Users } from './users/models/users.model';
+import { AuthModule } from './auth/auth.module';
 
 const sessions = new LocalSession({ database: 'session_db.json' });
 
@@ -32,6 +33,7 @@ const sessions = new LocalSession({ database: 'session_db.json' });
       }),
       ProductsModule,
       UsersModule,
+      AuthModule,
    ],
    controllers: [],
    providers: [],

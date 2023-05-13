@@ -41,10 +41,9 @@
  </template>
 
  <script lang="ts" setup>
- import { loginDasboard } from 'utils'
- import { reactive, ref } from 'vue'
- import type { FormInstance } from 'element-plus'
- import nuxtStorage from 'nuxt-storage';
+import { loginDasboard } from 'utils'
+import { reactive, ref } from 'vue'
+import type { FormInstance } from 'element-plus'
 const router = useRouter()
  const formRef = ref<FormInstance>()
  const isLogin = localStorage.getItem('login')
@@ -71,7 +70,6 @@ const router = useRouter()
          message: 'Неверный логин или пароль'
       })
    } else {
-      nuxtStorage.localStorage.setData('login', 'true');
       router.push('/admin/constructor')
    }
 }

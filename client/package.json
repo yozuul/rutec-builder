@@ -19,6 +19,6 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.9",
-    "nuxt-storage": "^1.2.2"
+    "http-proxy-middleware": "^2.0.6"
   }
 }
