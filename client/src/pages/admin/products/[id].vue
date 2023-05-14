@@ -115,11 +115,12 @@ const productName = ref(null)
 const productUrl = ref(null)
 const route = useRoute()
 const productId = route.params.id
+const useToken = useCookie('accessToken')
 findProductAndConver(productId)
 async function handleSave() {
    await updateProduct(productId, {
       name: productName.value, url: productUrl.value
-   })
+   }, useToken.value)
    notifySuccsess({
       message: 'Данные успещно сохранены'
    })

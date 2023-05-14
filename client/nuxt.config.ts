@@ -27,14 +27,19 @@ export default defineNuxtConfig({
       head: {
          title: 'Подборка добавок РУТЕК',
          meta: [
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+            {
+               name: 'viewport',
+               content: 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"'
+            },
             {
                hid: 'description',
                name: 'description',
-               content: 'ElementPlus + Nuxt3',
+               content: 'Подборка добавок РУТЕК',
             },
          ],
-         link: [{ rel: 'icon', type: 'image/x-icon', href: '/src/public/favicon.png' }],
+         link: [
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+         ],
       }
    },
 })

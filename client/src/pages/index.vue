@@ -97,7 +97,7 @@
 </main>
 </template>
 <script setup>
-import { handleCheckRecomendation, addUsers } from 'utils'
+import { handleCheckRecomendation } from 'utils'
 import { ElMessage } from 'element-plus'
 import { signs } from 'data'
 const selectors = ref([])
@@ -143,7 +143,7 @@ function seeRecomendation(recomended, fields) {
    if(recomended.length > 0) {
       let allRecomended = ''
       let prioriteRecomended = ''
-      recomendationText.value = ''
+      // recomendationText.value = ''
       for (let product of recomended) {
          if(product.prioriteFields || product.prioriteOrFields) {
             prioriteRecomended += product.name
@@ -172,20 +172,19 @@ function seeRecomendation(recomended, fields) {
          }
       }
       if(prioriteRecomended) {
-         recomendationText.value = prioriteRecomended
+         // recomendationText.value = prioriteRecomended
       } else {
-         recomendationText.value = allRecomended ? allRecomended : 'РЕКОМЕНДАЦИИ'
+         // recomendationText.value = allRecomended ? allRecomended : 'РЕКОМЕНДАЦИИ'
          console.log(prioriteRecomended)
          if(!allRecomended) {
             btnRecomendationActive.value = false
          }
-         // productToGo.value = product
       }
       // console.log('allRecomended:', allRecomended)
       // console.log('prioriteRecomended:', prioriteRecomended)
    }
    else {
-      recomendationText.value = 'РЕКОМЕНДАЦИИ'
+      // recomendationText.value = 'РЕКОМЕНДАЦИИ'
    }
    console.log(fields)
 }
@@ -237,9 +236,9 @@ async function handleBtnProductCheck() {
    if(inputFieldOk && selectorFIeldOk) {
       btnRecomendationActive.value = true
    }
-   if(recomendationText.value && recomendationText.value !== 'РЕКОМЕНДАЦИИ') {
-      btnRecomendationActive.value = true
-   }
+   // if(recomendationText.value && recomendationText.value !== 'РЕКОМЕНДАЦИИ') {
+   //    btnRecomendationActive.value = true
+   // }
 
    const { recomended, fields } = await handleCheckRecomendation(inputs.value, selectors.value)
    console.log('recomended', recomended)
@@ -281,13 +280,11 @@ const openHTML = () => {
   })
 }
 async function getPromo() {
-   const addUser = await addUsers({
+   const addUser = await sendPromo({
       email: promoEmail.value
    })
    if(addUser) {
-      notifySuccsess({
-         message: 'Отправили вам промокод на скидку'
-      })
+      notifySuccsess({ message: 'Отправили вам промокод на скидку' })
    }
 }
 onMounted(async () => {

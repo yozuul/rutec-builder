@@ -45,33 +45,33 @@ import { loginDasboard } from 'utils'
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 const router = useRouter()
- const formRef = ref<FormInstance>()
- const isLogin = localStorage.getItem('login')
- if(isLogin) {
-  router.push('/admin/constructor')
- }
+const formRef = ref<FormInstance>()
+const accessToken = useCookie('accessToken')
+if(accessToken.value) {
+   router.push('/admin/constructor')
+}
  const loginForm = reactive({
    email: '', password: ''
  })
 
- const submitForm = async (formEl: FormInstance | undefined) => {
-   if (!formEl) return
-   formEl.validate((valid) => {
-      if (valid) {
-         console.log('submit!')
-      } else {
-         console.log('error submit!')
-         return false
-      }
-   })
-   const isLogin = await loginDasboard(loginForm)
-   if(!isLogin) {
-      notifyError({
-         message: 'Неверный логин или пароль'
-      })
-   } else {
-      router.push('/admin/constructor')
-   }
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+        console.log('submit!')
+    } else {
+        console.log('error submit!')
+        return false
+    }
+  })
+  const isLogin = await loginDasboard(loginForm)
+  if(!isLogin) {
+    notifyError({ message: 'Неверный логин или пароль' })
+  }
+  if(isLogin && isLogin.token) {
+    accessToken.value = isLogin.token
+    router.push('/admin/constructor')
+  }
 }
 
  </script>

@@ -1,31 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { Users } from './models/users.model';
-import { Op } from 'sequelize';
-import { InjectModel } from '@nestjs/sequelize';
-import {Settings} from 'src/products/models/settings.model';
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/sequelize'
+
+import { Users } from './models/users.model'
+import { SettingsService } from 'src/settings/settings.service'
 
 @Injectable()
 export class UsersService {
    constructor(
       @InjectModel(Users)
       private userRepository: typeof Users,
-      @InjectModel(Settings)
-      private settingsRepository: typeof Settings,
+      private settingService: SettingsService
    ) {}
    async allUsers() {
       return this.userRepository.findAll()
    }
    async addUser(data) {
-      const setting = await this.settingsRepository.findAll()
-      const { promocode } = setting[0]
+      const { promocode } = await this.settingService.getSettings()
       return this.userRepository.create({
+         name: data.name,
+         password: data.password,
          email: data.email,
          promocode: promocode
       })
    }
-   async findByLogin(userLogin) {
+   async getUserByEmail(email) {
       return this.userRepository.findOne({
-         where: { email: userLogin }
+         where: { email: email }
       })
    }
    async defaulUser() {

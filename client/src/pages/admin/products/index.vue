@@ -32,18 +32,20 @@
 <script lang='ts' setup>
 import { getAllProducts, deleteProduct } from 'utils'
 import { Delete, Edit } from '@element-plus/icons-vue'
+const useToken = useCookie('accessToken')
 const productData = ref<Array<object>>([])
-productData.value = await getAllProducts() as Array<object>
-
+try {
+   productData.value = await getAllProducts(useToken?.value) as Array<object>
+} catch (error) {
+   notifyError({ message: 'Ошибка получения товаров' })
+}
 async function handleDelete(id: number) {
    productData.value = productData.value.filter((product: any) => product.id !== id)
-   await deleteProduct(id)
+   await deleteProduct(id, useToken?.value)
 }
-if(productData.value.length === 0) {
-   await addStartedProducts()
-}
-onMounted(() => {
-})
+// if(productData.value.length === 0) {
+//    await addStartedProducts()
+// }
 </script>
 
 <style>

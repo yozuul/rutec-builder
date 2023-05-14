@@ -7,11 +7,18 @@
             v-model="promo"
             placeholder="ABCD-EFGH-IGKL-LMNO"
          />
-         <h3>Email рассылки</h3>
-         <el-input
-            v-model="email"
-            placeholder="mail@mail.ru"
-         />
+         <h3>Email рассылка</h3>
+         <div class="wrappFlex">
+            <el-input
+               v-model="email"
+               placeholder="mail@mail.ru"
+            />
+            <el-input
+               v-model="password"
+               placeholder="Пароль приложения для выполнения рассылки"
+               type="password"
+            />
+         </div>
          <h3>Telegram Bot Token</h3>
          <el-input
             v-model="tgToken"
@@ -35,22 +42,25 @@
 import { getSettings, updateSettings } from 'utils'
 const promo = ref(null)
 const email = ref(null)
+const password = ref(null)
 const tgToken = ref(null)
+const useToken = useCookie('accessToken')
 async function fetchData() {
-   const settings = await getSettings()
+   const settings = await getSettings(useToken?.value)
    if(settings) {
       promo.value = settings.promocode
       email.value = settings.email
+      password.value = settings.password
       tgToken.value = settings.tgToken
    }
 }
 async function handleSave() {
-   await updateSettings({
-      promocode: promo.value, email: email.value
-   })
-   notifySuccsess({
-      message: 'Данные успещно сохранены'
-   })
+   const res = await updateSettings({
+      promocode: promo.value, email: email.value, password: password.value, tgToken: tgToken.value
+   }, useToken.value)
+   if(res) {
+      notifySuccsess({ message: 'Данные успешно сохранены' })
+   }
 }
 fetchData()
 </script>
@@ -63,4 +73,14 @@ definePageMeta({
 
 <style lang="scss">
 @import 'styles/main.scss';
+.wrappFlex {
+   display: flex;
+   margin-bottom: 15px;
+   justify-content: flex-start;
+   .el-input__wrapper {
+      &:first-child {
+         margin-right: 15px;
+      }
+   }
+}
 </style>

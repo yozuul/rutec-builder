@@ -2,14 +2,14 @@
 <NuxtLayout>
    <Card title="Пользователи">
       <el-table :data="usersData" style="width: 100%">
-         <el-table-column label="Имя" width="150">
+         <el-table-column label="Имя" width="300">
             <template #default="scope">
                <div style="display: flex; align-items: center">
                   {{ scope.row.name }}
                </div>
             </template>
          </el-table-column>
-         <el-table-column label="Email" width="200">
+         <el-table-column label="Email" width="250">
             <template #default="scope">
                <div style="display: flex; align-items: center">
                   {{ scope.row.email }}
@@ -54,20 +54,18 @@
 import { getAllUsers } from 'utils'
 import { Delete, Edit } from '@element-plus/icons-vue'
 const usersData = ref([])
-usersData.value = await getAllUsers()
-// import { getAllProducts, deleteProduct } from 'utils';
-// const productData = ref<Array<object>>([])
-// productData.value = await getAllProducts() as Array<object>
-
+const useToken = useCookie('accessToken')
+const data = await getAllUsers(useToken.value)
+if(!data.users) {
+   notifyError({ message: data.error })
+} else {
+   usersData.value = data.users
+}
 async function handleDelete(id: number) {
    // productData.value = productData.value.filter((product: any) => product.id !== id)
    // await deleteProduct(id)
-
 }
 
-onMounted(() => {
-
-})
 </script>
 
 <style>

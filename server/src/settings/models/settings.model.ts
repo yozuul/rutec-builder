@@ -4,7 +4,9 @@ const { INTEGER, STRING } = DataType
 
 interface SettingsCreationAttrs {
    promocode: string
-   email: string
+   email: string,
+   password: string | null
+   tgToken: string | null
 }
 
 @Table({ tableName: 'settings' })
@@ -21,4 +23,12 @@ export class Settings extends Model<Settings, SettingsCreationAttrs> {
    @Column({
       type: STRING, allowNull: false, defaultValue: 'ru-tec@yandex.ru'
    }) email: string
+
+   @Column({
+      type: STRING, allowNull: true
+   }) password: string
+
+   @Column({
+      type: STRING, allowNull: true
+   }) tgToken: string
 }

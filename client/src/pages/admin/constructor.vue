@@ -126,6 +126,7 @@ const selectedGroup = ref([])
 const inputs = ref([])
 const selectors = ref([])
 const conditions = ref([])
+const useToken = useCookie('accessToken')
 watch(selectedSigns, (newValue, oldValue) => {
    for (let signName of newValue) {
       selectedGroup.value = signs.filter((group) => newValue.includes(group.name));
@@ -182,7 +183,7 @@ async function handleSave() {
          }
       }
    }
-   await addProduct(productTemplate)
+   await addProduct(productTemplate, useToken?.value)
    notifySuccsess()
 }
 

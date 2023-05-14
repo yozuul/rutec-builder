@@ -1,28 +1,13 @@
+import { validateUser } from '../utils/fetch-data'
 export default defineNuxtRouteMiddleware(async (to, from) => {
    const router = useRouter()
-   console.log('auth middleware')
-   const useToken = useCookie('token')
-   // nuxtStorage.localStorage.removeItem('login');
-   // console.log(isLogin)
-   // if(!isLogin) {
-   //    router.push('/admin/login')
-   // } else {
-   //    console.log('logon')
-      // router.push('/admin/constructor')
-   // }
-//    const useToggler = useToggleMenuStore()
-//    const useUser  = useUserStore()
-//    const useAuth  = useAuthStore()
-//
-//    useToggler.hideDashboardMenu()
-
+   const route = useRoute()
+   const useToken = useCookie('accessToken')
    if(!useToken.value) {
-      // useAuth.logoutUser()
-      // return navigateTo('/')
+      router.push({ path: "/" })
    }
-
-   // const useShops = useShopsStore()
-   // if(to.name !== 'shops-first-step-one' && !useShops.addNewShop.name) {
-      // return navigateTo('/shops/first-step-one')
-   // }
+   const validator = await validateUser(useToken.value)
+   if(!validator) {
+      router.push({ path: "/" })
+   }
 })

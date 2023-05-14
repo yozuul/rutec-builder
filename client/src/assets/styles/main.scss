@@ -1,21 +1,33 @@
+body {
+   padding-bottom: 50px;
+   overflow-x: hidden;
+}
 .anketa_wrapper {
    max-width: 1430px;
    margin: auto;
    padding: 0 15px 0 15px;
+   display: flex;
+   flex-wrap: wrap;
    h1 {
-      font-size: 40px;
-      line-height: 2.5rem;
+      font-size: 30px;
+      line-height: 32px;
       margin-bottom: 15px;
    }
+   p {
+      font-size: 12px;
+      line-height: 18px;
+   }
    @media (min-width: 1400px) {
+      flex-wrap: nowrap;
       h1 {
          font-size: 60px;
          line-height: 3.5rem;
          margin-bottom: 15px;
       }
-   }
-   @media (min-width: 1400px) {
-      display: flex;
+      p {
+         font-size: 14px;
+         line-height: 22px;
+      }
    }
 }
 .anketa {
@@ -25,21 +37,63 @@
    flex-wrap: wrap;
    padding-top: 30px;
    position: relative;
-   @media (min-width: 1400px) {
-      padding-bottom: 80px;
+   order: 2;
+   .el-checkbox, .el-radio {
+      width: 100%;
+      --el-checkbox-font-size: 12px;
+      --el-radio-font-size: 12px;
+      align-items: flex-start;
+      white-space: pre-wrap;
+      height: auto;
+      padding-bottom: 10px;
+   }
+   .el-checkbox__label, .el-radio__label {
+      line-height: 16px;
    }
    sup {
       color: red;
    }
+   h3 {
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 10px;
+   }
+   @media (min-width: 1400px) {
+      padding-bottom: 40px;
+      order: 0;
+      .el-checkbox, .el-radio {
+         width: auto;
+         --el-checkbox-font-size: 14px;
+         --el-radio-font-size: 14px;
+         white-space: nowrap;
+         height: auto;
+         padding-bottom: 10px;
+      }
+      .el-checkbox__label, .el-radio__label {
+         line-height: 16px;
+      }
+      sup {
+         color: red;
+      }
+      h3 {
+         font-size: 16px;
+         line-height: 20px;
+         margin-bottom: 10px;
+      }
+   }
 }
 .anketaText {
+   padding-top: 15px;
+   max-width: 750px;
+   margin: auto;
    @media (min-width: 1400px) {
       padding-top: 30px;
+      margin: 0;
    }
 }
 .promoBlock {
    position: relative;
-   margin-bottom: 80px;
+   margin-bottom: 20px;
    @media (min-width: 1400px) {
       display: flex;
       flex-wrap: wrap;
@@ -64,7 +118,7 @@
 .rutecLogo {
    position: absolute;
    right: 0;
-   bottom: 10px;
+   bottom: -60px;
    @media (min-width: 1400px) {
       right: 120px;
       bottom: -25px;
@@ -72,10 +126,11 @@
 }
 .optionsGroup {
    width: 100%;
-   margin-bottom: 15px;
+   margin-bottom: 5px;
    &.inputs {
       display: flex;
       flex-wrap: wrap;
+      margin-bottom: 15px;
       h3 {
          width: 100%;
       }
@@ -83,10 +138,16 @@
          margin-right: 10px;
       }
    }
+   @media (min-width: 1400px) {
+      margin-bottom: 15px;
+   }
 }
 .inputGroup {
-   margin-top: 10px;
+   font-size: 12px;
    max-width: 150px;
+   @media (min-width: 1400px) {
+      font-size: 14px;
+   }
 }
 .el-radio-group {
    display: flex;
@@ -100,12 +161,12 @@
    bottom: 0;
    right: 0;
    left: 0;
-   min-height: 60px;
+   min-height: 50px;
    color: #fff;
    display: flex;
    align-items: center;
    justify-content: center;
-   font-size: 20px;
+   font-size: 16px;
    font-weight: bold;
    background-color: #999;
    text-align: center;
@@ -114,17 +175,31 @@
       cursor: pointer;
       background-color: #409EFF;
    }
+   @media (min-width: 1400px) {
+      min-height: 60px;
+      font-size: 20px;
+   }
+}
+.recomendationBtn {
+   z-index: 2;
 }
 .recomendationBtnDanger {
+   padding: 0 15px 0 15px;
    height: 30px;
-   font-size: 16px;
-   bottom: 60px;
+   font-size: 14px;
+   line-height: 16px;
+   bottom: 50px;
    background-color: red !important;
    display: none;
    &.active {
       z-index: 1;
       display: flex;
       cursor: default !important;
+   }
+   @media (min-width: 1400px) {
+      font-size: 18px;
+      line-height: 22px;
+      bottom: 60px;
    }
 }
 .deleteProductBtn {
@@ -170,5 +245,8 @@
    overflow: hidden;
 }
 .el-notification__content {
+   text-align: left;
+}
+.el-notification__content p {
    text-align: left;
 }
