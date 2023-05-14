@@ -1,5 +1,6 @@
 **/.*/
 **/.*.*
+rutec-builder.db
 **/node_modules/
 
 # compiled output
