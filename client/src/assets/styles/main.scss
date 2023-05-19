@@ -7,7 +7,7 @@ body {
    margin: auto;
    padding: 0 15px 0 15px;
    display: flex;
-   flex-wrap: wrap;
+   flex-wrap: wrap;;
    h1 {
       font-size: 30px;
       line-height: 32px;
@@ -86,6 +86,10 @@ body {
    padding-top: 15px;
    max-width: 750px;
    margin: auto;
+   order: 0;
+   .el-button--large {
+     --el-button-size: 40px;
+   }
    @media (min-width: 1400px) {
       padding-top: 30px;
       margin: 0;
@@ -152,9 +156,10 @@ body {
 .el-radio-group {
    display: flex;
    flex-wrap: wrap;
-   flex-direction: column;
    justify-content: flex-start;
-   align-items: baseline;
+   .el-radio {
+      width: 100%;
+   }
 }
 .recomendationBtn, .recomendationBtnDanger {
    position: fixed;

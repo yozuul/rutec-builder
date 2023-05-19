@@ -44,16 +44,19 @@
 import { loginDasboard } from 'utils'
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
+import { validateUser } from 'utils'
 const router = useRouter()
 const formRef = ref<FormInstance>()
 const accessToken = useCookie('accessToken')
 if(accessToken.value) {
-   router.push('/admin/constructor')
+   const validator = await validateUser(accessToken.value)
+   if(validator) {
+     router.push('/admin/constructor')
+   }
 }
- const loginForm = reactive({
-   email: '', password: ''
- })
-
+const loginForm = reactive({
+  email: '', password: ''
+})
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {

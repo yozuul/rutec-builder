@@ -26,6 +26,7 @@ export class AuthService {
    }
 
    private async validateUser(userDto: CreateUserDto) {
+      console.log(userDto)
       const user = await this.usersService.getUserByEmail(userDto.email)
       if(!user) {
          throw new UnauthorizedException({ message: 'Неверно указан email или пароль' })

@@ -7,6 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       router.push({ path: "/" })
    }
    const validator = await validateUser(useToken.value)
+   console.log('validator', validator)
    if(!validator) {
       router.push({ path: "/" })
    }

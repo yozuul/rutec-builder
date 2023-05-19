@@ -2,13 +2,17 @@ import { signs } from '../assets/data'
 export const getFieldsId = (inputs: any, selectors: any) => {
    const ids = []
    // В полях типа input, значения помещаются в массив под индексом соотвествующим ID этого поля
-   for (let inputField of inputs) {
+   for (let [index, inputField] of inputs.entries()) {
       if(inputField) {
+         if(index === 1) {
+            inputField = parseFloat(inputField.replace(/,/g, '.'))
+         }
          ids.push({
-            fieldId: inputs.indexOf(inputField), fieldValue: inputField
+            fieldId: index, fieldValue: inputField
          })
       }
    }
+   // console.log(...ids)
    // В остальных полях, значения помещаются под индексом группы, к которой относится это поле
    // Для получения ID поля, нужно найти по индексу его группу, а потом и сам ID по его значению
    selectors.map((selectorFields: any, signGroupIndex:number, ) => {
@@ -38,6 +42,5 @@ export const getFieldsId = (inputs: any, selectors: any) => {
          }
       }
    })
-   console.log(ids)
    return ids
 }

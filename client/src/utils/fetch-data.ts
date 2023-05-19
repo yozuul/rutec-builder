@@ -12,11 +12,10 @@ export const addProduct = async (data: any, token: any) => {
       headers: authHeaders(token)
    })
 }
-export const getAllProducts = async (token: any) => {
+export const getAllProducts = async () => {
    return $fetch('/products/all', {
       baseURL: baseURL,
       method: 'GET',
-      headers: authHeaders(token)
    })
 }
 export const getProductById = async (id: any, token: any) => {

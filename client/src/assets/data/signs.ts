@@ -5,10 +5,10 @@ export const signs = [
       part: 'car',
       type: 'input',
       fields: [
-         { id: 1, name: 'Объем двигателя', type: 'number', placeholder: '1.7', required: true },
+         { id: 1, name: 'Объем двигателя', type: 'number', placeholder: '1,7', required: true },
          { id: 2, name: 'Модель', placeholder: 'Лада' },
-         { id: 3, name: 'Марка', placeholder: 'Гранта',  },
-         { id: 4, name: 'Год выпуска', placeholder: '2020', type: 'number',  },
+         { id: 3, name: 'Марка', placeholder: 'Гранта' },
+         { id: 4, name: 'Год выпуска', placeholder: '2020', type: 'number' },
       ],
    },
    {
@@ -17,7 +17,7 @@ export const signs = [
       part: 'engine',
       type: 'radio',
       fields: [
-         { id: 5, name: 'До 100 000 км',  },
+         { id: 5, name: 'До 100 000 км' },
          { id: 6, name: 'От 100 000 км',},
       ],
    },
@@ -27,7 +27,9 @@ export const signs = [
       part: 'errors',
       type: 'checkbox',
       fields: [
-         { id: 999, name: 'Работа двигателя не сопровождается никаким из ниже перечисленных признаков:',  }
+         { id: 999,
+            name: 'Работа двигателя не сопровождается никаким из ниже перечисленных признаков:'
+         }
       ],
    },
    {
@@ -36,9 +38,9 @@ export const signs = [
       part: 'engine',
       type: 'radio',
       fields: [
-         { id: 7, name: 'Расход масла до 100 мл на 1000 км',  },
-         { id: 8, name: 'Расход масла до 500 мл на 1000 км',  },
-         { id: 9, name: 'Расход масла более 500 мл на 1000 км',  }
+         { id: 7, name: 'Расход масла до 100 мл на 1000 км' },
+         { id: 8, name: 'Расход масла до 500 мл на 1000 км' },
+         { id: 9, name: 'Расход масла более 500 мл на 1000 км' }
       ],
    },
    {
@@ -47,8 +49,8 @@ export const signs = [
       part: 'engine',
       type: 'checkbox',
       fields: [
-         { id: 10, name: 'Cизый дым при запуске',  },
-         { id: 11, name: 'Дымление во время движения',  },
+         { id: 10, name: 'Cизый дым при запуске' },
+         { id: 11, name: 'Дымление во время движения' },
       ],
    },
    {
@@ -57,10 +59,10 @@ export const signs = [
       part: 'engine',
       type: 'checkbox',
       fields: [
-         { id: 12, name: 'Повышенная вибрация',  },
-         { id: 13, name: 'Троение',  },
-         { id: 14, name: 'Стучат гидрокомпенсаторы',  },
-         { id: 15, name: 'Пониженная компрессия',  },
+         { id: 12, name: 'Повышенная вибрация' },
+         { id: 13, name: 'Троение' },
+         { id: 14, name: 'Стучат гидрокомпенсаторы' },
+         { id: 15, name: 'Пониженная компрессия' },
          { id: 16, name: 'Посторонние звуки/стуки (не гидрокомпенсаторы)', exception: true },
       ],
    },
