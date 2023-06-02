@@ -1,5 +1,4 @@
-import { signs } from '../assets/data'
-export const getFieldsId = (inputs: any, selectors: any) => {
+export const getFieldsId = (inputs: any, selectors: any, signs: any) => {
    const ids = []
    // В полях типа input, значения помещаются в массив под индексом соотвествующим ID этого поля
    for (let [index, inputField] of inputs.entries()) {
@@ -16,10 +15,12 @@ export const getFieldsId = (inputs: any, selectors: any) => {
    // В остальных полях, значения помещаются под индексом группы, к которой относится это поле
    // Для получения ID поля, нужно найти по индексу его группу, а потом и сам ID по его значению
    selectors.map((selectorFields: any, signGroupIndex:number, ) => {
+      console.log(selectorFields)
       if(selectorFields) {
          const foundedSignGroup = signs.find((signGroup) => signGroup.id === signGroupIndex)
+         console.log('foundedSignGroup', foundedSignGroup)
          if(!foundedSignGroup) return
-         for (let signField of foundedSignGroup.fields) {
+         for (let signField of foundedSignGroup.signs) {
             const arrItem = {
                signPart: foundedSignGroup.part,
                fieldId: signField.id, fieldName: signField.name,

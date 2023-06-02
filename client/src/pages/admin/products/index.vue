@@ -1,6 +1,10 @@
 <template>
 <NuxtLayout>
-   <Card title="Товары">
+   <Card
+      title="Товары"
+      buttonText="Добавить товар"
+      buttonRoute="/admin/products/add"
+   >
       <el-table :data="productData" style="width: 100%">
          <el-table-column label="Наименование">
             <template #default="scope">

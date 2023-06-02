@@ -1,0 +1,23 @@
+.border {
+   border-top: 1px solid var(--el-border-color);
+   margin-bottom: 18px;
+}
+.el-input__wrapper, .el-textarea.el-input--default {
+   max-width: 700px;
+}
+.signsHelp {
+   padding-left: 130px;
+   padding-top: 20px;
+}
+.inline_form {
+   .el-form-item__content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+   }
+}
+.constructorBlock {
+   .el-select {
+      width: 140px;
+   }
+}

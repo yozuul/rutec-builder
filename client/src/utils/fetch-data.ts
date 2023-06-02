@@ -72,6 +72,7 @@ export const loginDasboard = async (data: any) => {
    return isLogin
 }
 export const sendPromo = async (data: any) => {
+   console.log('ddd')
    let promo = null
    try {
       promo = await $fetch(`/auth/sendPromo`, {

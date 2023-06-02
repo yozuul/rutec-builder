@@ -1,0 +1,19 @@
+<template>
+<NuxtLayout>
+   <PagesSignsAddEdit cardTitle="Новая группа признаков" />
+</NuxtLayout>
+</template>
+
+<script lang="ts" setup>
+</script>
+
+<style lang="scss">
+@import '@/assets/styles/add-edit-cards.scss';
+</style>
+
+<script lang="ts">
+definePageMeta({
+   layout: 'dashboard',
+   middleware: 'auth'
+})
+</script>

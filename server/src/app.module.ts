@@ -10,10 +10,12 @@ import { ProductsModule } from './products/products.module'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { SettingsModule } from './settings/settings.module'
+import { SignsModule } from './signs/signs.module'
 
 import { Product } from './products/models/product.model'
 import { Users } from './users/models/users.model'
 import { Settings } from './settings/models/settings.model'
+import { SignsGroups, Signs } from './signs/model'
 
 const sessions = new LocalSession({ database: 'session_db.json' })
 
@@ -26,7 +28,7 @@ const sessions = new LocalSession({ database: 'session_db.json' })
       SequelizeModule.forRoot({
          dialect: 'sqlite',
          storage: resolve('rutec-builder.db'),
-         models: [Product, Settings, Users],
+         // models: [Product, Settings, Users, SignsGroups, Signs],
          autoLoadModels: true,
          logging: false
       }),
@@ -37,19 +39,22 @@ const sessions = new LocalSession({ database: 'session_db.json' })
       MailerModule.forRootAsync({
          useFactory: async () => {
             const setting = await Settings.findOne({})
+            const users = setting.email.split('@')[0]
+            console.log('users', users)
+            console.log('setting.password', setting.password)
             return {
                transport: {
                   host: 'smtp.yandex.ru', port: 465,
                   secure: true,
                   auth: {
-                     user: setting.email.split('@')[0],
+                     user: users,
                      pass: setting.password,
                   },
                }
             }
          }
       }),
-      ProductsModule, UsersModule, AuthModule, SettingsModule,
+      ProductsModule, UsersModule, AuthModule, SettingsModule, SignsModule
    ],
    controllers: [],
    providers: [],

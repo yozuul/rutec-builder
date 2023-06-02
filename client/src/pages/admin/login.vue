@@ -40,41 +40,41 @@
    </div>
  </template>
 
- <script lang="ts" setup>
-import { loginDasboard } from 'utils'
+<script lang="ts" setup>
+const useFetch = useFetchData()
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
-import { validateUser } from 'utils'
+
 const router = useRouter()
 const formRef = ref<FormInstance>()
 const accessToken = useCookie('accessToken')
 if(accessToken.value) {
-   const validator = await validateUser(accessToken.value)
+   const validator = await useFetch.validateUser()
    if(validator) {
-     router.push('/admin/constructor')
+      router.push('/admin/constructor')
    }
 }
 const loginForm = reactive({
   email: '', password: ''
 })
 const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.validate((valid) => {
-    if (valid) {
-        console.log('submit!')
-    } else {
-        console.log('error submit!')
-        return false
-    }
-  })
-  const isLogin = await loginDasboard(loginForm)
-  if(!isLogin) {
-    notifyError({ message: 'Неверный логин или пароль' })
-  }
-  if(isLogin && isLogin.token) {
-    accessToken.value = isLogin.token
-    router.push('/admin/constructor')
-  }
+   if (!formEl) return
+   formEl.validate((valid) => {
+      if (valid) {
+         console.log('submit!')
+      } else {
+         console.log('error submit!')
+         return false
+      }
+   })
+   const isLogin = await useFetch.loginDasboard(loginForm)
+   if(!isLogin) {
+      notifyError({ message: 'Неверный логин или пароль' })
+   }
+   if(isLogin && isLogin.token) {
+      accessToken.value = isLogin.token
+      router.push('/admin/constructor')
+   }
 }
 
  </script>

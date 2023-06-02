@@ -59,7 +59,7 @@ function checkBadSigns(exceptions: any, fields: any, productToGo: any, urlToGo: 
    const badSigns = [7,8,9,10,11,12,13,14,15]
    // Если в рекомендациях есть товар-исключения ПроВолк
    console.log('exceptions', ...exceptions)
-   // ПРоверяем что не выбран "После последнего ТО"
+   // Пhоверяем что не выбран "После последнего ТО"
    for (let field of fields) {
       if(field.fieldId === 17) return
    }

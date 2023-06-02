@@ -10,8 +10,12 @@
 <script setup lang='ts'>
 onMounted(() => {
    const url = new URL(window.location.href)
-   if(document.querySelector(`li[url="${url.pathname}"]`)) {
-      (document.querySelector(`li[url="${url.pathname}"]`) as HTMLElement).click()
+   const menuItems = document.querySelectorAll(`[role="menuitem"]`)
+   for (let menuLink of menuItems) {
+      menuLink.classList.remove('is-active')
+      if(menuLink.getAttribute('url') === url.pathname) {
+         menuLink.classList.add('is-active')
+      }
    }
 })
 </script>

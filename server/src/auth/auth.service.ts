@@ -26,7 +26,6 @@ export class AuthService {
    }
 
    private async validateUser(userDto: CreateUserDto) {
-      console.log(userDto)
       const user = await this.usersService.getUserByEmail(userDto.email)
       if(!user) {
          throw new UnauthorizedException({ message: 'Неверно указан email или пароль' })
@@ -81,10 +80,10 @@ export class AuthService {
    public sendMail(email, promocode): void {
       this.mailerService.sendMail({
           to: email,
-          from: 'yozuul@yandex.ru',
+          from: 'ru-tec@yandex.ru',
           subject: '✔ Промокод на скидку от RUTEC',
           text: '✔ Вы запросили промокод на скидку RUTEC',
-          html: `<b>Ваш промокод на скидку: ${promocode}</b><br />Подбор добавок в моторные масла и других смазочных материалов <a href="https://dvaresursa.ru/">https://dvaresursa.ru/</a>`,
+          html: `Ваш промокод на скидку 15% при покупке в интернет-магазине <a href="https://rutec-shop.ru/">https://rutec-shop.ru/</a> <b>${promocode}</b>`
         })
         .then((success) => {
           console.log(success)

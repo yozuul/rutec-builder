@@ -1,16 +1,15 @@
-export function goToPage(
-   btnRecomendationActive: any, urlToGo: any, productToGo: any, text: any, openHTML: any
-) {
+export function goToPage(btnRecomendationActive: any, urlToGo: any, productToGo: any) {
    if(btnRecomendationActive.value) {
       if(urlToGo.value) {
+         window.open(urlToGo.value, '_blank')
          if(productToGo.value?.recText) {
-            text.value = productToGo.value.recText
-            openHTML()
-            setTimeout(() => {
-               window.open(urlToGo.value, '_blank')
-            }, 3000);
-         } else {
-            window.open(urlToGo.value, '_blank');
+            ElMessage({
+               showClose: true,
+               dangerouslyUseHTMLString: true,
+               message: productToGo.value.recText,
+               type: 'success',
+               duration: 0
+            })
          }
       } else {
          notifyError({

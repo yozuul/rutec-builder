@@ -37,12 +37,7 @@
                      <el-icon><edit /></el-icon>
                   </el-button>
                </nuxt-link>
-               <el-button class="deleteProductBtn"
-                  size="small" type="danger"
-                  @click="handleDelete(scope.row.id)"
-               >
-                  <el-icon><delete /></el-icon>
-               </el-button>
+               <DeleteWithConfirm @click="handleDelete(scope.row.id)" />
             </template>
          </el-table-column>
       </el-table>
@@ -75,5 +70,5 @@ async function handleDelete(id: number) {
 definePageMeta({
    layout: 'dashboard',
    middleware: 'auth'
-});
+})
 </script>

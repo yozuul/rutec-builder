@@ -21,6 +21,7 @@ export class SettingsService {
       }
       return settings
    }
+
    async updateSettings({ promocode, email, password }) {
       console.log('SettingsService updateSettings', promocode, email, password)
       const settings = await this.settingsRepository.findOne({})

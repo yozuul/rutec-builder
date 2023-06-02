@@ -6,8 +6,8 @@ export const signs = [
       type: 'input',
       fields: [
          { id: 1, name: 'Объем двигателя', type: 'number', placeholder: '1,7', required: true },
-         { id: 2, name: 'Модель', placeholder: 'Лада' },
-         { id: 3, name: 'Марка', placeholder: 'Гранта' },
+         { id: 2, name: 'Марка', placeholder: 'Лада' },
+         { id: 3, name: 'Модель', placeholder: 'Гранта' },
          { id: 4, name: 'Год выпуска', placeholder: '2020', type: 'number' },
       ],
    },
@@ -72,7 +72,7 @@ export const signs = [
       part: 'engine',
       type: 'radio',
       fields: [
-         { id: 17, name: 'После последнего ТО',},
+         { id: 17, name: 'После последнего ТО', },
          { id: 18, name: 'Давно' },
       ],
    },

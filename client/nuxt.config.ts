@@ -2,14 +2,14 @@ import { resolve } from 'path'
 export default defineNuxtConfig({
    // ssr: false,
    routeRules: {
-     '/': { static: true },
+   //   '/': { static: true },
      '/admin/**': { ssr: false },
    },
    srcDir: './src',
    alias: {
-      styles: resolve('./src/assets/styles/'),
-      utils:  resolve('./src/utils'),
-      data:   resolve('./src/assets/data')
+      styles: resolve(__dirname, './src/assets/styles/'),
+      utils:  resolve(__dirname, './src/utils'),
+      data:   resolve(__dirname, './src/assets/data')
    },
    modules: [
       '@pinia/nuxt', '@element-plus/nuxt'
@@ -21,7 +21,8 @@ export default defineNuxtConfig({
       ],
    },
    css: [
-      '~/assets/styles/reset.css'
+      '~/assets/styles/reset.css',
+      '~/assets/styles/main.scss',
    ],
    app: {
       head: {

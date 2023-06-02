@@ -1,7 +1,13 @@
 // Очистка селекторов механизмов не относящихся к двигателю
-export function clearNotEnginePartSelectors(selectors: any, groupId: any) {
+export function clearNotEnginePartSelectors(selectors: any, groupId: any, signs: any) {
    // ID групп АКПП / МКПП / ГУР ..., выбранные значения которых записываются в селектор под индексом ID этой группы (определено в sign.ts)
-   const onlyOneFrom = [6, 7, 8, 9, 10]
+   const onlyOneFrom: any = []
+   for (let sign of signs) {
+      if(sign.part === 'unit') {
+         onlyOneFrom.push(sign.id)
+      }
+   }
+   if(onlyOneFrom.length === 0) return
    const onlyOneFromNumbers = []
    selectors.value.forEach((value: number, index: number) => {
       if(onlyOneFrom.includes(index) && value !== undefined) {

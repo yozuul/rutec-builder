@@ -1,33 +1,66 @@
 <template>
-   <el-aside width="200px">
-      <el-menu
-         class="el-menu-vertical"
+<el-aside width="220px">
+   <el-menu
+      default-active="1"
+      class="el-menu-vertical-demo"
+      :collapse="isCollapse"
+      @open="handleOpen"
+      @close="handleClose"
+   >
+      <el-menu-item index="1"
+         url='/admin/products' @click="navigateTo('/admin/products')"
       >
-        <el-menu-item index="0" :url="url[0].href" @click="$router.push(url[0].href)">
-          <el-icon><icon-menu /></el-icon>
-          <span>Конструктор</span>
-        </el-menu-item>
-        <el-menu-item index="1" :url="url[1].href" @click="$router.push(url[1].href)">
-          <el-icon><document /></el-icon>
-          <span>Товары</span>
-        </el-menu-item>
-        <el-menu-item index="2" :url="url[2].href" @click="$router.push(url[2].href)">
-          <el-icon><odometer /></el-icon>
-          <span>Признаки</span>
-        </el-menu-item>
-        <el-menu-item index="3" :url="url[3].href" @click="$router.push(url[3].href)">
+         <el-icon><ShoppingCart /></el-icon>
+         <template #title>Товары</template>
+      </el-menu-item>
+      <el-menu-item index="2"
+         url='/admin/signs' @click="navigateTo('/admin/signs')"
+      >
+         <el-icon><Odometer /></el-icon>
+         <template #title>Признаки</template>
+      </el-menu-item>
+      <el-sub-menu index="3">
+         <template #title>
+            <el-icon><Location /></el-icon>
+            <span>Партнёры</span>
+         </template>
+         <el-menu-item index="3-1">Одобренные</el-menu-item>
+         <el-menu-item index="3-2">Заявки</el-menu-item>
+      </el-sub-menu>
+      <el-sub-menu index="5">
+         <template #title>
+            <el-icon><Files /></el-icon>
+            <span>Материалы</span>
+         </template>
+         <el-menu-item index="5-1">Факты</el-menu-item>
+         <el-menu-item index="5-2">Видео</el-menu-item>
+      </el-sub-menu>
+      <el-menu-item index="6"
+         url='/admin/users' @click="navigateTo('/admin/users')"
+      >
          <el-icon><User /></el-icon>
-          <span>Пользователи</span>
-        </el-menu-item>
-        <el-menu-item index="4" :url="url[3].href" @click="$router.push(url[4].href)">
-          <el-icon><setting /></el-icon>
-          <span>Настройки</span>
-        </el-menu-item>
-      </el-menu>
-   </el-aside>
+         <template #title>Пользователи</template>
+      </el-menu-item>
+      <el-menu-item index="7"
+         url='/admin/settings' @click="navigateTo('/admin/settings')"
+      >
+         <el-icon><setting /></el-icon>
+         <template #title>Настройки</template>
+      </el-menu-item>
+   </el-menu>
+</el-aside>
 </template>
 
 <script setup lang='ts'>
+const isCollapse = ref(false)
+const handleOpen = (key: string, keyPath: string[]) => {
+//   console.log('key', key)
+//   console.log('keyPath', keyPath)
+}
+const handleClose = (key: string, keyPath: string[]) => {
+//   console.log(key, keyPath)
+}
+
 const url = [
    {
       id: 1,
@@ -63,14 +96,20 @@ const url = [
 </script>
 
 <style>
-.el-menu {
+.el-aside {
    min-height: 100vh;
+   border-right: solid 1px var(--el-menu-border-color);
+}
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 219px;
+  min-height: 400px;
+  border-right: none;
 }
 </style>
 <script lang='ts'>
 import {
-  Document, User,
-  Menu as IconMenu,
+  Document, User, Files, ShoppingCart,
+  Menu as IconMenu, Location,
   Setting, Odometer
 } from '@element-plus/icons-vue'
 </script>
