@@ -40,7 +40,7 @@
                <div v-else>Да</div>
             </template>
          </el-table-column>
-         <el-table-column label="Управление" width="130">
+         <el-table-column width="130">
             <template #default="scope">
                <nuxt-link :to="`/admin/signs/${scope.row.id}`">
                   <el-button size="small">

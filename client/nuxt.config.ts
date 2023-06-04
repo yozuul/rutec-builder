@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+
 export default defineNuxtConfig({
    // ssr: false,
    routeRules: {
@@ -12,7 +13,8 @@ export default defineNuxtConfig({
       data:   resolve(__dirname, './src/assets/data')
    },
    modules: [
-      '@pinia/nuxt', '@element-plus/nuxt'
+      '@element-plus/nuxt',
+      '@pinia/nuxt'
    ],
    pinia: {
       autoImports: [

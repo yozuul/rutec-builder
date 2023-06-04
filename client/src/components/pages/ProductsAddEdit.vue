@@ -236,7 +236,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
          } catch (error) {
             ElNotification({
                title: 'Ошибка',
-               message: 'Не могли добавить товар:(',
+               message: 'Не могли добавить товар :(',
                type: 'error',
             })
          }

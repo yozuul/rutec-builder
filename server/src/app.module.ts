@@ -16,6 +16,7 @@ import { Product } from './products/models/product.model'
 import { Users } from './users/models/users.model'
 import { Settings } from './settings/models/settings.model'
 import { SignsGroups, Signs } from './signs/model'
+import { PartnersModule } from './partners/partners.module';
 
 const sessions = new LocalSession({ database: 'session_db.json' })
 
@@ -54,7 +55,7 @@ const sessions = new LocalSession({ database: 'session_db.json' })
             }
          }
       }),
-      ProductsModule, UsersModule, AuthModule, SettingsModule, SignsModule
+      ProductsModule, UsersModule, AuthModule, SettingsModule, SignsModule, PartnersModule
    ],
    controllers: [],
    providers: [],

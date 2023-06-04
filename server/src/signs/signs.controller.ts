@@ -1,7 +1,7 @@
 import { Controller, Get, Put, Body, UseGuards, Post, Req, Delete, Param } from '@nestjs/common';
 
-import { SignsService } from './signs.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { SignsService } from './signs.service';
 
 @Controller('signs')
 export class SignsController {

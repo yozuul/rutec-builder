@@ -19,22 +19,42 @@
          <el-icon><Odometer /></el-icon>
          <template #title>Признаки</template>
       </el-menu-item>
-      <el-sub-menu index="3">
+      <el-menu-item index="3"
+         url='/admin/partners' @click="navigateTo('/admin/partners')"
+      >
+         <el-icon><Location /></el-icon>
+         <template #title>Партнёры</template>
+      </el-menu-item>
+      <!-- <el-sub-menu index="3">
          <template #title>
             <el-icon><Location /></el-icon>
             <span>Партнёры</span>
          </template>
-         <el-menu-item index="3-1">Одобренные</el-menu-item>
-         <el-menu-item index="3-2">Заявки</el-menu-item>
-      </el-sub-menu>
-      <el-sub-menu index="5">
+         <el-menu-item index="3-1"
+            url='/admin/partners' @click="navigateTo('/admin/partners')"
+         >
+         Одобренные
+      </el-menu-item>
+         <el-menu-item index="3-2"
+            url='/admin/partners/tickets' @click="navigateTo('/admin/partners/tickets')"
+         >
+            Заявки
+         </el-menu-item>
+      </el-sub-menu> -->
+      <!-- <el-sub-menu index="5">
          <template #title>
             <el-icon><Files /></el-icon>
             <span>Материалы</span>
          </template>
          <el-menu-item index="5-1">Факты</el-menu-item>
          <el-menu-item index="5-2">Видео</el-menu-item>
-      </el-sub-menu>
+      </el-sub-menu> -->
+      <el-menu-item index="5"
+         url='/admin/promo' @click="navigateTo('/admin/promo')"
+      >
+         <el-icon><Files /></el-icon>
+         <template #title>Промо</template>
+      </el-menu-item>
       <el-menu-item index="6"
          url='/admin/users' @click="navigateTo('/admin/users')"
       >
