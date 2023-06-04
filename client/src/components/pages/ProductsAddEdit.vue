@@ -109,22 +109,22 @@ const signsGroup = await useFetch.getAllSignGroup() as any
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
    name: '', url: '', recText: '',
-   signsName: [],
-   conditions: [],
-   inputs: [],  selectors: [],
-   signsData: [],
+   signsName: [] as any,
+   conditions: [] as any,
+   inputs: [] as any,  selectors: [] as any,
+   signsData: [] as any,
 })
-
-
-const existGroups = new Set()
-const existGroupSign: any = []
-
+// Если через пропс передали товар
 if(props.existProduct) {
+   const existGroups = new Set()
+   const existGroupSign: any = []
    const product = props.existProduct
    ruleForm.name = product.name
    ruleForm.url = product.url
-   ruleForm.recText = product.recText
-   let signs: any = convertProductsFields(product)
+   ruleForm.recText = product.recText !== 'null' ? product.recText : ''
+   // Сначала конвертим признаки из строки в объект
+   convertProductsFields(product)
+   // Далее, нам нужно пройтись по всем полям признаков, сделать выборку из групп которые там представлены, для формирования основной структуры имеющихся признаков, а также сформировать сами признаки с привязкой к группам и условиям.
    const fieldsToParse = [
       'fields', 'orFields', 'notFields', 'notOrFields', 'prioriteFields', 'prioriteOrFields'
    ]
@@ -133,8 +133,14 @@ if(props.existProduct) {
          findSignGroup(product[fieldName], fieldName)
       }
    }
-
-   ruleForm.signsData = [...ruleForm.signsData, ...Array.from(existGroups)] as any
+   // Все данные обработаны, теперь раскладываем по нужным переменным
+   // Формируем структуру имеющихся признаков
+   ruleForm.signsData = [...ruleForm.signsData, ...Array.from(existGroups)]
+   // Добавляем названия выбранных признаков для отображения в выпадающем списке всех признаков
+   for (let sign of ruleForm.signsData) {
+      ruleForm.signsName.push(sign.name)
+   }
+   // Добавляем данные об отмеченных полях, значениях и условиях
    for (let sign of existGroupSign) {
       if(sign.fieldsType === 'input') {
          ruleForm.inputs[sign.id] = sign.value
@@ -144,99 +150,42 @@ if(props.existProduct) {
             ruleForm.selectors[sign.groupId] = []
          }
          ruleForm.selectors[sign.groupId].push(sign.name)
-         // console.log('ruleForm.selectors[sign.id]', ruleForm.selectors[sign.id])
       }
+      const conditionsSchema = {
+         fields: 'И', orFields: 'ИЛИ', notFields: '!И', notOrFields: '!ИЛИ', prioriteFields: '=И', prioriteOrFields: '=ИЛИ'
+      }
+      ruleForm.conditions[sign.id] = conditionsSchema[sign.condition]
    }
-   console.log('ruleForm.selectors', ruleForm.selectors)
-   console.log('existGroupSign', existGroupSign)
-   // ruleForm.signsData = [...ruleForm.signsData, ...Array.from(groups)]
-   // // if(!ruleForm.signsData) {
-   // //    ruleForm.signsData = Array.from(groups)
-   // // }
-   // console.log('groupSign', groupSign)
-   // // console.log('groupSign', ...groupSign)
-   // return groupSign
-
-   console.log(ruleForm.signsData)
-}
-
-function findSignGroup(signData: any, condition: any) {
-   for (let sign of signData) {
-      for (let group of signsGroup) {
-         const founded = group.signs.find((groupSign: any) => groupSign.id === sign.id)
-         if(founded) {
-            existGroups.add(group)
-            existGroupSign.push({
-               ...sign, ...founded,
-               ...{ groupId: group.id },
-               ...{ fieldsType: group.fieldsType },
-               ...{ condition: condition }
-            })
+   function findSignGroup(signData: any, condition: any) {
+      for (let sign of signData) {
+         for (let group of signsGroup) {
+            const founded = group.signs.find((groupSign: any) => groupSign.id === sign.id)
+            if(founded) {
+               // Поскольку в каждой группе несколько признаков, добавляем группы в сет, чтобы отсеить дубли
+               existGroups.add(group)
+               // В сам признак, помимо данных о нём, добавляем ID его группы, тип полей, и условие, к которому он добавлен (fields / orFields / notFields и тд)
+               existGroupSign.push({
+                  ...sign, ...founded,
+                  ...{ groupId: group.id },
+                  ...{ fieldsType: group.fieldsType },
+                  ...{ condition: condition }
+               })
+            }
          }
       }
    }
-}
-
-function prepareDataForSave() {
-   const ids = getFieldsId(ruleForm.inputs, ruleForm.selectors, signsGroup)
-   const productTemplate: any = {
-      name: ruleForm.name, url: ruleForm.url, recText: ruleForm.recText,
-      fields: [], orFields: [],
-      notFields: [], notOrFields: [],
-      prioriteFields: [], prioriteOrFields: [],
-   }
-   for (let field of ids) {
-      const fieldId = field.fieldId
-      const fieldVal = field.fieldValue
-      const fieldCondition = ruleForm.conditions[fieldId]
-      if(fieldCondition === 'И') {
-         productTemplate.fields.push({
-            id: fieldId, value: fieldVal || null
-         })
-      }
-      if(fieldCondition === 'ИЛИ') {
-         productTemplate.orFields.push(fieldId)
-      }
-      if(fieldCondition === '!И') {
-         productTemplate.notFields.push(fieldId)
-      }
-      if(fieldCondition === '!ИЛИ') {
-         productTemplate.notOrFields.push(fieldId)
-      }
-      if(fieldCondition === '=И') {
-         productTemplate.prioriteFields.push(fieldId)
-      }
-      if(fieldCondition === '=ИЛИ') {
-         productTemplate.prioriteOrFields.push(fieldId)
-      }
-   }
-   for (let checkField in productTemplate) {
-      if(productTemplate[checkField]?.length === 0) {
-         productTemplate[checkField] = null
-      } else {
-         if(typeof productTemplate[checkField] === 'object') {
-            productTemplate[checkField] = JSON.stringify(productTemplate[checkField])
-         }
-      }
-   }
-   return productTemplate
 }
 
 function pushSignsData() {
-   console.log(ruleForm.signsName)
    if(ruleForm.signsName.length === 0) {
       ruleForm.signsData = []
       return
    }
    for (let signName of ruleForm.signsName) {
-      console.log('ruleForm.signsData', ruleForm.signsData)
       const signsGroupData = signsGroup.find((sign: any) => sign.name === signName)
       const findData = ruleForm.signsData.find((sign: any) => sign.name === signName) as any
       if(!findData) {
          ruleForm.signsData.push(signsGroupData)
-      }
-      if(findData) {
-         ruleForm.signsData = ruleForm.signsData.filter((sign: any) => sign.id === findData.id)
       }
    }
 }
@@ -258,24 +207,87 @@ const submitForm = async (formEl: FormInstance | undefined) => {
    await formEl.validate(async (valid, fields) => {
       if (valid) {
          const preparedData = prepareDataForSave()
-         try {
-            await useFetch.addProduct(preparedData)
-            ElNotification({
-               title: 'Готово',
-               message: 'Товар успешно добавлен',
-               type: 'success',
-            })
-         } catch (error) {
-            ElNotification({
-               title: 'Ошибка',
-               message: 'Не могли добавить товар :(',
-               type: 'error',
-            })
+         if(!props.existProduct) {
+            try {
+               await useFetch.addProduct(preparedData)
+               ElNotification({
+                  title: 'Готово',
+                  message: 'Товар успешно добавлен',
+                  type: 'success',
+               })
+            } catch (error) {
+               ElNotification({
+                  title: 'Ошибка',
+                  message: 'Не могли добавить товар :(',
+                  type: 'error',
+               })
+            }
+         }
+         if(props.existProduct) {
+            try {
+               await useFetch.updateProduct(props.existProduct.id, preparedData)
+               ElNotification({
+                  title: 'Готово',
+                  message: 'Товар успешно обнволён',
+                  type: 'success',
+               })
+            } catch (error) {
+               ElNotification({
+                  title: 'Ошибка',
+                  message: 'Не могли обновить товар :(',
+                  type: 'error',
+               })
+            }
          }
       } else {
          console.log('error submit!', fields)
       }
    })
+}
+
+function prepareDataForSave() {
+   const ids = getFieldsId(ruleForm.inputs, ruleForm.selectors, signsGroup)
+   const productTemplate: any = {
+      name: ruleForm.name, url: ruleForm.url, recText: ruleForm.recText,
+      fields: [], orFields: [],
+      notFields: [], notOrFields: [],
+      prioriteFields: [], prioriteOrFields: [],
+   }
+   for (let field of ids) {
+      const fieldId = field.fieldId
+      const fieldVal = field.fieldValue
+      const fieldCondition = ruleForm.conditions[fieldId]
+      if(fieldCondition === 'И') {
+         productTemplate.fields.push({
+            id: fieldId, value: fieldVal || null
+         })
+      }
+      if(fieldCondition === 'ИЛИ') {
+         productTemplate.orFields.push({ id: fieldId })
+      }
+      if(fieldCondition === '!И') {
+         productTemplate.notFields.push({ id: fieldId })
+      }
+      if(fieldCondition === '!ИЛИ') {
+         productTemplate.notOrFields.push({ id: fieldId })
+      }
+      if(fieldCondition === '=И') {
+         productTemplate.prioriteFields.push({ id: fieldId })
+      }
+      if(fieldCondition === '=ИЛИ') {
+         productTemplate.prioriteOrFields.push({ id: fieldId })
+      }
+   }
+   for (let checkField in productTemplate) {
+      if(productTemplate[checkField]?.length === 0) {
+         productTemplate[checkField] = null
+      } else {
+         if(typeof productTemplate[checkField] === 'object') {
+            productTemplate[checkField] = JSON.stringify(productTemplate[checkField])
+         }
+      }
+   }
+   return productTemplate
 }
 
 const resetForm = (formEl: FormInstance | undefined) => {

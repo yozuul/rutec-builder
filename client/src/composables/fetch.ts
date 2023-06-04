@@ -6,8 +6,6 @@ export const useFetchData = defineStore('useFetchData', () => {
    }
    const baseURL = process.env.NODE_ENV === 'development' ? apiURL.dev : apiURL.prod
    const useToken = useCookie('accessToken')
-   // ПАРТНЁРЫ
-
 
    // ПРИЗНАКИ
    const getAllSignGroup = async () => {

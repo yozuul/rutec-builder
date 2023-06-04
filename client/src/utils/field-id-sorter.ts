@@ -3,7 +3,7 @@ export const getFieldsId = (inputs: any, selectors: any, signs: any) => {
    // В полях типа input, значения помещаются в массив под индексом соотвествующим ID этого поля
    for (let [index, inputField] of inputs.entries()) {
       if(inputField) {
-         if(index === 1) {
+         if(index === 4) {
             inputField = parseFloat(inputField.replace(/,/g, '.'))
          }
          ids.push({
@@ -17,7 +17,7 @@ export const getFieldsId = (inputs: any, selectors: any, signs: any) => {
    selectors.map((selectorFields: any, signGroupIndex:number, ) => {
       console.log(selectorFields)
       if(selectorFields) {
-         const foundedSignGroup = signs.find((signGroup) => signGroup.id === signGroupIndex)
+         const foundedSignGroup = signs.find((signGroup: any) => signGroup.id === signGroupIndex)
          console.log('foundedSignGroup', foundedSignGroup)
          if(!foundedSignGroup) return
          for (let signField of foundedSignGroup.signs) {

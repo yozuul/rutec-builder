@@ -39,12 +39,9 @@ export class ProductsService implements OnModuleInit {
    }
    async updateProduct(id, data) {
       console.log('ProductsService updateProduct', id, data)
-      const product = await this.productRepository.findOne({
+      const product = await this.productRepository.update(data, {
          where: { id: id }
       })
-      product.name = data.name
-      product.url = data.url
-      await product.save()
       return product
    }
 
