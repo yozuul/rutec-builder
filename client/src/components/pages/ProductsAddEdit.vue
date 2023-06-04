@@ -115,9 +115,12 @@ const ruleForm = reactive({
    signsData: [],
 })
 
+
+const existGroups = new Set()
+const existGroupSign: any = []
+
 if(props.existProduct) {
    const product = props.existProduct
-   console.log(product)
    ruleForm.name = product.name
    ruleForm.url = product.url
    ruleForm.recText = product.recText
@@ -127,23 +130,51 @@ if(props.existProduct) {
    ]
    for (let fieldName of fieldsToParse) {
       if(product[fieldName]) {
-         const data = findSignGroup(product[fieldName])
-         console.log(data)
+         findSignGroup(product[fieldName], fieldName)
       }
    }
+
+   ruleForm.signsData = [...ruleForm.signsData, ...Array.from(existGroups)] as any
+   for (let sign of existGroupSign) {
+      if(sign.fieldsType === 'input') {
+         ruleForm.inputs[sign.id] = sign.value
+      }
+      if((sign.fieldsType === 'radio') || (sign.fieldsType === 'checkbox')) {
+         if(!ruleForm.selectors[sign.groupId]) {
+            ruleForm.selectors[sign.groupId] = []
+         }
+         ruleForm.selectors[sign.groupId].push(sign.name)
+         // console.log('ruleForm.selectors[sign.id]', ruleForm.selectors[sign.id])
+      }
+   }
+   console.log('ruleForm.selectors', ruleForm.selectors)
+   console.log('existGroupSign', existGroupSign)
+   // ruleForm.signsData = [...ruleForm.signsData, ...Array.from(groups)]
+   // // if(!ruleForm.signsData) {
+   // //    ruleForm.signsData = Array.from(groups)
+   // // }
+   // console.log('groupSign', groupSign)
+   // // console.log('groupSign', ...groupSign)
+   // return groupSign
+
+   console.log(ruleForm.signsData)
 }
 
-function findSignGroup(signData: any) {
-   const data = []
+function findSignGroup(signData: any, condition: any) {
    for (let sign of signData) {
       for (let group of signsGroup) {
          const founded = group.signs.find((groupSign: any) => groupSign.id === sign.id)
          if(founded) {
-            data.push({...sign, ...founded })
+            existGroups.add(group)
+            existGroupSign.push({
+               ...sign, ...founded,
+               ...{ groupId: group.id },
+               ...{ fieldsType: group.fieldsType },
+               ...{ condition: condition }
+            })
          }
       }
    }
-   return data
 }
 
 function prepareDataForSave() {
@@ -192,6 +223,7 @@ function prepareDataForSave() {
 }
 
 function pushSignsData() {
+   console.log(ruleForm.signsName)
    if(ruleForm.signsName.length === 0) {
       ruleForm.signsData = []
       return

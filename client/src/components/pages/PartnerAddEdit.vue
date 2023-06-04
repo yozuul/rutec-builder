@@ -6,6 +6,7 @@
       :rules="rules"
       label-width="170px"
       size="default"
+      class="partnersForm"
       status-icon
    >
       <el-form-item label="Наименование" prop="companyName">

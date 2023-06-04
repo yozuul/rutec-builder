@@ -1,67 +1,32 @@
 <template>
 <NuxtLayout>
    <Card
-      title="Партнёры"
-      buttonText="Добавить партнёра"
-      buttonRoute="/admin/partners/add"
+      title="Промо материалы"
+      buttonText="Добавить материал"
+      buttonRoute="/admin/promo/add"
    >
-      <el-button size="small" @click="clearFilter">Очистить фильтры</el-button>
-      <el-table ref="tableRef" row-key="companyName" :data="currentPageData" style="width: 100%">
+      <el-table ref="tableRef" row-key="id" :data="currentPageData" style="width: 100%">
+
+         <el-table-column prop="name" label="Название" sortable />
          <el-table-column
-            prop="companyName"
-            label="Название"
-            sortable
-            column-key="companyName"
-         />
-         <el-table-column
-            width="180"
-            prop="city"
-            label="Город"
-            sortable
-            column-key="city"
-            :filters="cityFilterData"
-            :filter-method="filterCity"
-         />
-         <el-table-column
-            width="160"
-            prop="companyType"
+            prop="type"
             label="Тип"
             sortable
-            column-key="companyType"
+            width="180"
+            column-key="type"
             :filters="[
-               { text: 'Автосервис', value: 'Автосервис' },
-               { text: 'Магазин', value: 'Магазин' },
-               { text: 'Предприятие', value: 'Предприятие' },
+               { text: 'Факт', value: 'Факт' },
+               { text: 'Видео', value: 'Видео' },
             ]"
-            :filter-method="filterTypes"
+            :filter-method="filterType"
          />
-         <el-table-column prop="email" label="Email" width="250" />
-         <el-table-column
-            prop="status"
-            label="Статус"
-            width="130"
-            sortable
-            column-key="status"
-            :filters="[
-               { text: 'Одобрен', value: 'Одобрен' },
-               { text: 'Ожидает', value: 'Ожидает' },
-               { text: 'Отклонён', value: 'Отклонён' },
-            ]"
-            :filter-method="filterStatus"
-            filter-placement="bottom-end"
-         >
-            <template #default="scope">
-               <el-tag
-                  :type="scope.row.status === 'Одобрен' ? 'success' : scope.row.status === 'Отклонён' ? 'danger' : ''"
-                  disable-transitions
-                  >{{ scope.row.status }}</el-tag
-               >
-            </template>
-         </el-table-column>
 
-         <el-table-column width="130">
+         <el-table-column width="160" align="right">
+            <template #header>
+               <el-button size="small" @click="clearFilter">Очистить фильтры</el-button>
+            </template>
             <template #default="scope">
-               <nuxt-link :to="`/admin/partners/${scope.row.id}`">
+               <nuxt-link :to="`/admin/promo/${scope.row.id}`">
                   <el-button size="small">
                      <el-icon><edit /></el-icon>
                   </el-button>
@@ -69,20 +34,21 @@
 
                <el-button class="deleteProductBtn"
                   size="small" type="danger"
-                  @click="deleteConfirm(scope.row.id, scope.row.name)"
+                  @click="deleteConfirm(scope.row.id)"
                >
                   <el-icon><delete /></el-icon>
                </el-button>
             </template>
          </el-table-column>
       </el-table>
+
       <el-pagination
          @size-change="handleSizeChange"
          @current-change="handleCurrentChange"
          :current-page="currentPage"
          :page-size="pageSize"
          layout="prev, pager, next"
-         :total="companyData.length"
+         :total="promoData.length"
       />
    </Card>
 </NuxtLayout>
@@ -90,70 +56,49 @@
 
 <script lang='ts' setup>
 import type { TableInstance } from 'element-plus'
-const partnerStore = usePartnerStore()
-await partnerStore.fetchAllPartners()
-await partnerStore.fetchCity()
+import { usePromoStore } from '~/store/promoStore'
 
-const cityFilterData: any = ref([])
-let citySet = new Set()
-partnerStore.partners.map((partner: any) => {
-   citySet.add(partner.city.name);
-})
-cityFilterData.value = Array.from(citySet).map(city => ({
-      text: city, value: city
-}))
+const promoStore = usePromoStore()
+await promoStore.fetchAllPromo()
 
-interface Partners {
-   id: number
-   companyName: string
-   companyType: string
-   city: string
-   type: string
-   phone?: string
-   email: string
-   status: string
+interface Promo {
+   name: string
+   type: 'Факт' | 'Видео'
+   text: string | null
+   videoUrl: string | null
+   videoPreview: string | null
 }
 
+let promoData: Promo[] = promoStore.allPromo
 const tableRef = ref<TableInstance>()
 const clearFilter = () => {
-   // @ts-expect-error
-   tableRef.value!.clearFilter()
+  // @ts-expect-error
+  tableRef.value!.clearFilter()
 }
-
-const filterCity = (value: string, row: Partners) => {
-   return row.city === value
+const filterType = (value: string, row: Promo) => {
+  return row.type === value
 }
-const filterTypes = (value: string, row: Partners) => {
-   return row.companyType === value
-}
-const filterStatus = (value: string, row: Partners) => {
-   return row.status === value
-}
-let companyData: Partners[] = partnerStore.partners.map((partner: any) => {
-   return {...partner, ...{ city: partner.city.name }}
-})
 // Пагинация
-const pageSize = ref(50) // Значение по умолчанию для количества элементов на странице
-const currentPage = ref(1) // Начальная страница
-let currentPageData = ref<Partners[]>([])
-
-watchEffect(() => {
-   currentPageData.value = companyData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
+const pageSize = ref(50)
+const currentPage = ref(1)
+let currentPageData = ref<Promo[]>([])
+   watchEffect(() => {
+   currentPageData.value = promoData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
 })
 // Обновляет текущую страницу
 const handleSizeChange = (val: number) => {
    pageSize.value = val
-   currentPageData.value = companyData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
+   currentPageData.value = promoData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
 }
 const handleCurrentChange = (val: number) => {
    currentPage.value = val
-   currentPageData.value = companyData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
+   currentPageData.value = promoData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
 }
 // Удаление
 const deleteConfirm = async (id: number) => {
    try {
       await ElMessageBox.confirm(
-         'Уверены, что хотите удалить партнёра?', 'Внимание!',
+         'Уверены, что хотите удалить материал?', 'Внимание!',
          {
             cancelButtonText: 'Отмена',
             confirmButtonText: 'OK',
@@ -161,28 +106,26 @@ const deleteConfirm = async (id: number) => {
          }
       )
       try {
-         await partnerStore.deletePartner(id)
-         currentPageData.value = currentPageData.value.filter((company: any) => company.id !== id)
+         await promoStore.deletePromo(id)
+         currentPageData.value = currentPageData.value.filter((promo: any) => promo.id !== id)
          ElMessage({
             type: 'success',
-            message: `Партнёр с ID ${id} удалён`,
+            message: `Материал удалён`,
          })
       } catch (error) {
          ElMessage({
             type: 'error',
-            message: `При удалении партнёра с ID ${id}  возникла ошибка`,
+            message: `При удалении материала возникла ошибка`,
          })
       }
    } catch (error) {
       console.log('Удаление отменено')
    }
 }
-
 </script>
 
 <script lang='ts'>
 import { Delete, Edit } from '@element-plus/icons-vue'
-import { usePartnerStore } from '~/store/partnerStore'
 definePageMeta({
    layout: 'dashboard',
    middleware: 'auth'

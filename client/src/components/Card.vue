@@ -8,7 +8,7 @@
          {{ buttonText }}
       </el-button>
    </div>
-   <el-card class="box-card signsList">
+   <el-card class="box-card">
       <!-- <template #header>
          <div class="card-header"></div>
       </template> -->

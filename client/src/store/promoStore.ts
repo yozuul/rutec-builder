@@ -1,44 +1,32 @@
 import { defineStore } from 'pinia'
 import {
-   getAllPartners, getPartner, addPartner, deletePartner, updatePartner, getAllCity, addCity
-} from '~/services/partnerService'
+   getAllPromo, getPromo, addPromo, deletePromo, updatePromo
+} from '~/services/promoService'
 
-export const usePartnerStore = defineStore({
-   id: 'partner',
+export const usePromoStore = defineStore({
+   id: 'promo',
    state: () => ({
-      partners: [],
-      cities: [],
-      currentPartner: null
+      allPromo: [],
+      currentPromo: null
    }),
    actions: {
-      async fetchAllPartners() {
-         this.partners = await getAllPartners() as any
+      async fetchAllPromo() {
+         this.allPromo = await getAllPromo() as any
       },
-      async fetchPartner(id: any) {
-         const partners = await getPartner(id) as any
-         if(partners) {
-            partners.companySpec = JSON.parse(partners.companySpec)
-         }
-         this.currentPartner = partners
+      async fetchPromo(id: any) {
+         this.currentPromo = await getPromo(id) as any
       },
-      async addPartner(data: any) {
-         await addPartner(data) as any
+      async addPromo(data: any) {
+         await addPromo(data) as any
       },
-      async deletePartner(id: any) {
-         await deletePartner(id) as any
-         this.partners = this.partners.filter((partner: any) => partner.id !== id)
+      async deletePromo(id: any) {
+         await deletePromo(id) as any
+         this.allPromo = this.allPromo.filter((promo: any) => promo.id !== id)
       },
-      async updatePartner(id: string, data: any) {
-        const updatedPartner = await updatePartner(id, data)
-        const index = this.partners.findIndex((partner: any) => partner.id === id)
-        this.partners[index] = updatedPartner;
-      },
-      // ГОРОДА
-      async fetchCity() {
-         this.cities = await getAllCity() as any
-      },
-      async addCity(name: string) {
-         return addCity(name) as any
+      async updatePromo(id: string, data: any) {
+        const updatedPromo = await updatePromo(id, data)
+        const index = this.allPromo.findIndex((partner: any) => partner.id === id)
+        this.allPromo[index] = updatedPromo;
       },
    }
 })

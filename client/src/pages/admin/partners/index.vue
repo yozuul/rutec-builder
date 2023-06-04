@@ -5,7 +5,6 @@
       buttonText="Добавить партнёра"
       buttonRoute="/admin/partners/add"
    >
-      <el-button size="small" @click="clearFilter">Очистить фильтры</el-button>
       <el-table ref="tableRef" row-key="companyName" :data="currentPageData" style="width: 100%">
          <el-table-column
             prop="companyName"
@@ -59,7 +58,10 @@
             </template>
          </el-table-column>
 
-         <el-table-column width="130">
+         <el-table-column width="160" align="right">
+            <template #header>
+               <el-button size="small" @click="clearFilter">Очистить фильтры</el-button>
+            </template>
             <template #default="scope">
                <nuxt-link :to="`/admin/partners/${scope.row.id}`">
                   <el-button size="small">
@@ -69,7 +71,7 @@
 
                <el-button class="deleteProductBtn"
                   size="small" type="danger"
-                  @click="deleteConfirm(scope.row.id, scope.row.name)"
+                  @click="deleteConfirm(scope.row.id)"
                >
                   <el-icon><delete /></el-icon>
                </el-button>
@@ -133,8 +135,8 @@ let companyData: Partners[] = partnerStore.partners.map((partner: any) => {
    return {...partner, ...{ city: partner.city.name }}
 })
 // Пагинация
-const pageSize = ref(50) // Значение по умолчанию для количества элементов на странице
-const currentPage = ref(1) // Начальная страница
+const pageSize = ref(50)
+const currentPage = ref(1)
 let currentPageData = ref<Partners[]>([])
 
 watchEffect(() => {
