@@ -14,6 +14,7 @@ import { Partners, PartnersCity } from './models';
       ]),
    ],
    controllers: [PartnersController],
-   providers: [PartnersService]
+   providers: [PartnersService],
 })
 export class PartnersModule {}
+

@@ -15,7 +15,7 @@ export function block_WHEN_TROUBLE_sign_group(selectors: any, block: any, signs:
    selectors.value.forEach((selector: any, index: number) => {
       if(onlyOneFrom.includes(index)) {
          if(selector) {
-            console.log('selector.length', selector.length)
+            // console.log('selector.length', selector.length)
             if(selector?.length > 0) {
                blockBLock = false
             }

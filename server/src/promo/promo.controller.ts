@@ -22,6 +22,10 @@ export class PromoController {
    async getPromoById(@Param() { id }: any) {
       return this.promoService.getPromoById(id)
    }
+   @Get('/random')
+   async getRandom() {
+      return this.promoService.getRandom()
+   }
    @UseGuards(JwtAuthGuard)
    @Post('/add')
    @UseInterceptors(FileInterceptor('file'))

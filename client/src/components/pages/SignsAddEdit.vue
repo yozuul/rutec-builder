@@ -156,6 +156,7 @@ const ruleForm = reactive({
 })
 
 function addSign(data?: any) {
+   console.log(data)
    if(ruleForm.fieldsType === 'input') {
       inputTypeInput.value = true
    } else {
@@ -163,16 +164,33 @@ function addSign(data?: any) {
    }
    const index = signsForms.value.length
    const signsElements: any = {
-      required: data ? data.requred : false,
+      required: data ? data.required : false,
       id: data ? data.id : index,
       name: data ? data.name : '',
       props: [],
       placeholder: data ? data.placeholder : '',
       numbersOnly: data ? data.numbersOnly : false
    }
+   if(data.trouble) {
+      signsElements.props.push('Неисправность')
+   }
+   if(data.alert) {
+      signsElements.props.push('Предупреждение')
+   }
+   if(data.blockRecomendation) {
+      signsElements.props.push('Блокировать рекомендации')
+   }
+   if(data.special) {
+      signsElements.props.push('Особое')
+   }
+   if(data.required) {
+      signsElements.props.push('Обязательное')
+   }
    signsForms.value.push(
       reactive(signsElements)
    )
+
+   console.log(signsForms)
 }
 
 if(existSignGroupData) {
@@ -187,6 +205,7 @@ if(existSignGroupData) {
          addSign(sign)
       }
    }
+   console.log(signsForms)
 }
 
 const rules = reactive<FormRules>({

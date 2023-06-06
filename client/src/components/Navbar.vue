@@ -7,21 +7,15 @@
       @open="handleOpen"
       @close="handleClose"
    >
-      <el-menu-item index="1"
-         url='/admin/products' @click="navigateTo('/admin/products')"
-      >
+      <el-menu-item index="0" @click="navigateTo('/admin/products')">
          <el-icon><ShoppingCart /></el-icon>
          <template #title>Товары</template>
       </el-menu-item>
-      <el-menu-item index="2"
-         url='/admin/signs' @click="navigateTo('/admin/signs')"
-      >
+      <el-menu-item index="1" @click="navigateTo('/admin/signs')">
          <el-icon><Odometer /></el-icon>
          <template #title>Признаки</template>
       </el-menu-item>
-      <el-menu-item index="3"
-         url='/admin/partners' @click="navigateTo('/admin/partners')"
-      >
+      <el-menu-item index="2" @click="navigateTo('/admin/partners')">
          <el-icon><Location /></el-icon>
          <template #title>Партнёры</template>
       </el-menu-item>
@@ -49,21 +43,15 @@
          <el-menu-item index="5-1">Факты</el-menu-item>
          <el-menu-item index="5-2">Видео</el-menu-item>
       </el-sub-menu> -->
-      <el-menu-item index="5"
-         url='/admin/promo' @click="navigateTo('/admin/promo')"
-      >
+      <el-menu-item index="3" @click="navigateTo('/admin/promo')">
          <el-icon><Files /></el-icon>
          <template #title>Промо</template>
       </el-menu-item>
-      <el-menu-item index="6"
-         url='/admin/users' @click="navigateTo('/admin/users')"
-      >
+      <el-menu-item index="4" @click="navigateTo('/admin/users')">
          <el-icon><User /></el-icon>
          <template #title>Пользователи</template>
       </el-menu-item>
-      <el-menu-item index="7"
-         url='/admin/settings' @click="navigateTo('/admin/settings')"
-      >
+      <el-menu-item index="5" @click="navigateTo('/admin/settings')">
          <el-icon><setting /></el-icon>
          <template #title>Настройки</template>
       </el-menu-item>
@@ -72,6 +60,7 @@
 </template>
 
 <script setup lang='ts'>
+const route = useRoute()
 const isCollapse = ref(false)
 const handleOpen = (key: string, keyPath: string[]) => {
 //   console.log('key', key)
@@ -81,6 +70,29 @@ const handleClose = (key: string, keyPath: string[]) => {
 //   console.log(key, keyPath)
 }
 
+const activeIndex = ref('0')
+watchEffect(() => {
+   switch(route.path) {
+      case '/admin/products':
+         activeIndex.value = '0'
+         break
+      case '/admin/signs':
+         activeIndex.value = '1'
+         break
+      case '/admin/partners':
+         activeIndex.value = '2'
+         break
+      case '/admin/promo':
+         activeIndex.value = '3'
+         break
+      case '/admin/users':
+         activeIndex.value = '4'
+         break
+      case '/admin/settings':
+         activeIndex.value = '5'
+         break
+   }
+})
 const url = [
    {
       id: 1,

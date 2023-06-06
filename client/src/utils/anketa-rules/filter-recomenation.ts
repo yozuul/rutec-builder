@@ -55,20 +55,18 @@ function checkAllRecomendations(recomended: any, fields: any, productToGo: any, 
 }
 
 function checkBadSigns(exceptions: any, fields: any, productToGo: any, urlToGo: any) {
-   // Проверяем признаки неисправностей
-   const badSigns = [7,8,9,10,11,12,13,14,15]
    // Если в рекомендациях есть товар-исключения ПроВолк
    console.log('exceptions', ...exceptions)
    // Пhоверяем что не выбран "После последнего ТО"
    for (let field of fields) {
-      if(field.fieldId === 17) return
+      if(field.fieldId === 49) return
    }
    if(exceptions.length >= 1) {
       const selectedBadSigns = []
       // Проверяем сколько неисправностей выбрано
       for (let field of fields) {
-         if(badSigns.includes(field.fieldId)) {
-            selectedBadSigns.push(field.fieldId)
+         if(field.trouble) {
+            selectedBadSigns.push(field)
          }
       }
       console.log('Отмечено признаков неисправностей:', selectedBadSigns.length)
@@ -83,13 +81,11 @@ function checkBadSigns(exceptions: any, fields: any, productToGo: any, urlToGo: 
       // -  { id: 15, name: 'Пониженная компрессия' }
       if(selectedBadSigns.length === 1) {
          let exception = true
-         const specialSigns = [7,8,9,14,15,17]
-         for (let special of specialSigns) {
-            if(selectedBadSigns.includes(special)) {
+         for (let sign of selectedBadSigns) {
+            if(sign.special) {
                exception = false
             }
          }
-         console.log(exception)
          if(exception) {
             addExceptionToRecomendation()
          } else {
@@ -112,8 +108,10 @@ function checkBadSigns(exceptions: any, fields: any, productToGo: any, urlToGo: 
 }
 
 function checkExceptions(fields: any, btnRecomendationActive: any, recomendationBtnDanger: any) {
+   // console.log('fields', fields)
    // Проверяем, выбран ли пункт "Посторонние звуки/стуки (не гидрокомпенсаторы)"
-   const isException = fields.find((field: any) => field.fieldId === 16)
+   const isException = fields.find((field: any) => field.blockRecomendation === true)
+   // console.log(isException)
    if(isException) {
       // Если выбран, деактивируем кнопку рекомендаций и показываем кнопку позвонить
       btnRecomendationActive.value = false
@@ -127,13 +125,13 @@ function checkExceptions(fields: any, btnRecomendationActive: any, recomendation
 function checkDangerBtn(fields: any, recomendationBtnDanger: any) {
    // Проверяем, выбран ли "Периодические или разовые долгие простои от 1 месяца и более"
    for (let field of fields) {
-      if(field.fieldId === 39) {
+      if(field.alert) {
          recomendationBtnDanger.value = true
          return
       }
    }
    // Проверяем, выбран ли только "Троение"
-   if(fields.length === 1 && fields[0].fieldId === 13) {
+   if(fields.length === 1 && fields[0].alert) {
       recomendationBtnDanger.value = true
       return
    }

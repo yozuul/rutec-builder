@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 import { SignsGroups, Signs } from './model';
+import {Op} from 'sequelize';
 
 @Injectable()
 export class SignsService implements OnModuleInit {
@@ -14,7 +15,6 @@ export class SignsService implements OnModuleInit {
 
 
    async getClearSign() {
-
    }
 
    async getAllSignsGroup() {
@@ -58,24 +58,31 @@ export class SignsService implements OnModuleInit {
       })
    }
 
-   async updateSignGroup(id, data) {
-      console.log('SignsService updateSignGroup', id, data)
-      const signGroup = await this.signsGroupRepo.findOne({
-         where: { id: id }
+   async updateSignGroup(groupId, SignGroupData) {
+      console.log('SignsService updateSignGroup', groupId, SignGroupData)
+      const signGroup = await this.signsGroupRepo.update(SignGroupData, {
+         where: { id: groupId }
       })
-      console.log(data)
-      signGroup.name = data.name
-      signGroup.part = data.part
-      signGroup.fieldsType = data.fieldsType
-      signGroup.trouble = data.trouble
-      await signGroup.save()
-      await this.signsRepo.destroy({
-         where: { signGroupId: id }
-      })
-      data.signs = data.signs.map(sign => {
-         return { ...sign, signGroupId: id };
-      })
-      await this.signsRepo.bulkCreate(data.signs)
+      for (let sign of SignGroupData.signs) {
+         const existSign = await this.signsRepo.findOne({
+            where: {
+               [Op.and]: [
+                  { signGroupId: groupId },
+                  { name: sign.name },
+               ]
+            }
+         })
+         if(existSign) {
+            await this.signsRepo.update(sign, {
+               where: { id: existSign.id }
+            })
+         } else {
+            console.log(sign)
+            await this.signsRepo.create({
+               ...sign, ...{ signGroupId: groupId }
+            })
+         }
+      }
       return signGroup
    }
 

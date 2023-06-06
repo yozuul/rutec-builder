@@ -39,16 +39,23 @@ export async function updatePartner(id: string, data: any) {
       body: data,
    })
 }
-export async function getAllCity() {
-   console.log(baseUrl)
+export async function getCityForUser() {
    try {
-      const res = await $fetch(`/city`, {
+      return $fetch(`/getCityForUser`, {
+         baseURL: baseUrl,
+         method: 'GET',
+      })
+   } catch (error) {
+      console.log(error)
+   }
+}
+export async function getAllCity() {
+   try {
+      return $fetch(`/city`, {
          baseURL: baseUrl,
          method: 'GET',
          headers: apiConfig.authHeader
       })
-      console.log('res', res)
-      return res
    } catch (error) {
       console.log(error)
    }
@@ -59,6 +66,13 @@ export async function addCity(data: any) {
       method: 'POST',
       headers: apiConfig.authHeader,
       body: data
+   })
+}
+export async function findByCity(name: any) {
+   return $fetch(`/findByCity/${name}`, {
+      baseURL: baseUrl,
+      method: 'GET',
+      headers: apiConfig.authHeader,
    })
 }
 

@@ -16,6 +16,12 @@ export async function getPromo(id: string) {
       headers: apiConfig.authHeader
    })
 }
+export async function getRandomPromo() {
+   return $fetch(`/random`, {
+      baseURL: baseUrl,
+      method: 'GET',
+   })
+}
 export async function addPromo(data: any) {
    return $fetch(`/add`, {
       baseURL: baseUrl,

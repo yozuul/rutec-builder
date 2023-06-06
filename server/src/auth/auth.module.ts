@@ -21,6 +21,6 @@ import { SettingsModule } from 'src/settings/settings.module'
    ],
    controllers: [AuthController],
    providers: [AuthService],
-   exports: [JwtModule]
+   exports: [JwtModule, AuthService]
 })
 export class AuthModule {}

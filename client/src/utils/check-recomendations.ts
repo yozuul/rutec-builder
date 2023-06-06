@@ -2,12 +2,13 @@ import { getFieldsId } from "./field-id-sorter";
 import { convertProductsFields } from "./convert-products-fields"
 import { useFetchData } from '../composables/fetch'
 
-export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
+export const handleCheckRecomendation = async (inputs: any, selectors: any, signs: any) => {
    const useFetch = useFetchData()
 	const recomendedProducts = [];
 	const exceptionsProducts = [];
 	// Ищем ID отмеченных признаков
-	const fieldsData = getFieldsId(inputs.value, selectors.value);
+	const fieldsData = getFieldsId(inputs.value, selectors.value, signs)
+	console.log(fieldsData)
 	//  Получаем все товары
 	const existProducts: Array<any> = (await useFetch.getAllProducts()) as Array<any>;
 	// Сверяем товары с признаками
@@ -31,6 +32,7 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка обязательных полей
 		if (product.fields && product.fields.length > 0) {
 			for (let field of product.fields) {
+				// console.log(field)
 				// Проверка, что все обязательные поля из товара присутствуют в анкете
 				const fieldData = fieldsData.find(
 					(data: any) => data.fieldId === field.id
@@ -40,8 +42,7 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
             }
 				// Проверка, что значения полей совпадают
 				if (field.value && fieldData.fieldValue) {
-					// console.log('field.value', field.value)
-					const [min, max] = field.value.split("<x<");
+					const [min, max] = field.value.toString().split('<x<');
 					const floatFieldVal = parseFloat(fieldData.fieldValue);
 					if (!(parseFloat(min) <= floatFieldVal) ||!(floatFieldVal <= parseFloat(max))) {
 						return false;
@@ -52,8 +53,8 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка поля "хотябы одно из"
 		if (product.orFields && product.orFields.length > 0) {
 			if (
-				!product.orFields.some((id: any) =>
-					fieldsData.some((data: any) => data.fieldId === id)
+				!product.orFields.some((field: any) =>
+					fieldsData.some((data: any) => data.fieldId === field.id)
 				)
 			) {
 				return false;
@@ -62,8 +63,8 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка поля "ни одного из"
 		if (product.notFields && product.notFields.length > 0) {
 			if (
-				product.notFields.some((id: any) =>
-					fieldsData.some((data: any) => data.fieldId === id)
+				product.notFields.some((field: any) =>
+					fieldsData.some((data: any) => data.fieldId === field.id)
 				)
 			) {
 				return false;
@@ -72,8 +73,8 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка поля "ни одного из группы"
 		if (product.notOrFields && product.notOrFields.length > 0) {
 			if (
-				product.notOrFields.some((id: any) =>
-					fieldsData.some((data: any) => data.fieldId === id)
+				product.notOrFields.some((field: any) =>
+					fieldsData.some((data: any) => data.fieldId === field.id)
 				)
 			) {
 				return false;
@@ -82,8 +83,8 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка поля "все из приоритетных"
 		if (product.prioriteFields && product.prioriteFields.length > 0) {
 			if (
-				!product.prioriteFields.every((id: any) =>
-					fieldsData.some((data: any) => data.fieldId === id)
+				!product.prioriteFields.every((field: any) =>
+					fieldsData.some((data: any) => data.fieldId === field.id)
 				)
 			) {
 				return false;
@@ -92,8 +93,8 @@ export const handleCheckRecomendation = async (inputs: any, selectors: any) => {
 		// Проверка поля "одно из приоритетных"
 		if (product.prioriteOrFields && product.prioriteOrFields.length > 0) {
 			if (
-				!product.prioriteOrFields.some((id: any) =>
-					fieldsData.some((data: any) => data.fieldId === id)
+				!product.prioriteOrFields.some((field: any) =>
+					fieldsData.some((data: any) => data.fieldId === field.id)
 				)
 			) {
 				return false;

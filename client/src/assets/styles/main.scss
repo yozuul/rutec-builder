@@ -4,10 +4,15 @@ body {
 main h1 {
    margin: 10px 0 20px 0;
 }
-.anketa_wrapper {
+.anketa_wrapper, .headerMenu {
    max-width: 1430px;
    margin: auto;
    padding: 0 15px 0 15px;
+}
+.headerMenu {
+   margin-bottom: 40px;
+}
+.anketa_wrapper {
    display: flex;
    flex-wrap: wrap;;
    h1 {
@@ -37,7 +42,6 @@ main h1 {
    margin: auto;
    display: flex;
    flex-wrap: wrap;
-   padding-top: 30px;
    position: relative;
    order: 2;
    .el-checkbox, .el-radio {
@@ -51,6 +55,7 @@ main h1 {
    }
    .el-checkbox__label, .el-radio__label {
       line-height: 16px;
+      white-space: normal;
    }
    sup {
       color: red;
@@ -64,7 +69,7 @@ main h1 {
       padding-bottom: 40px;
       order: 0;
       .el-checkbox, .el-radio {
-         width: auto;
+         // width: auto;
          --el-checkbox-font-size: 14px;
          --el-radio-font-size: 14px;
          white-space: nowrap;
@@ -85,7 +90,6 @@ main h1 {
    }
 }
 .anketaText {
-   padding-top: 15px;
    max-width: 750px;
    margin: auto;
    order: 0;
@@ -93,7 +97,6 @@ main h1 {
      --el-button-size: 40px;
    }
    @media (min-width: 1400px) {
-      padding-top: 30px;
       margin: 0;
    }
 }

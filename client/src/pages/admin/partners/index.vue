@@ -109,6 +109,7 @@ interface Partners {
    id: number
    companyName: string
    companyType: string
+   adress: string
    city: string
    type: string
    phone?: string

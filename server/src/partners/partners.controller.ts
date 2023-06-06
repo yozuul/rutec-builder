@@ -18,7 +18,7 @@ export class PartnersController {
    async getPartnerById(@Param() { id }: any) {
       return this.partnerService.getPartnerById(id)
    }
-   @UseGuards(JwtAuthGuard)
+   // @UseGuards(JwtAuthGuard)
    @Post('/add')
    async addPartner(@Body() data: any) {
       return this.partnerService.addPartner(data)
@@ -33,10 +33,18 @@ export class PartnersController {
    async editPartner(@Param() { id }: any, @Body() data: any) {
       return this.partnerService.editPartner(id, data)
    }
-   @UseGuards(JwtAuthGuard)
+   // @UseGuards(JwtAuthGuard)
    @Get('/city')
    async getAllCity() {
       return this.partnerService.getAllCity()
+   }
+   @Get('/getCityForUser')
+   async getCityForUser() {
+      return this.partnerService.getCityForUser()
+   }
+   @Get('/findByCity/:name')
+   async findByCity(@Param() { name }: any) {
+      return this.partnerService.findByCity(name)
    }
    @UseGuards(JwtAuthGuard)
    @Post('/city/add')

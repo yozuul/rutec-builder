@@ -43,22 +43,6 @@ export class AuthService {
       }
    }
 
-   // async registration(userDto: CreateUserDto) {
-   //    if(!userDto.email) {
-   //       throw new HttpException(
-   //          'Email не указан', HttpStatus.BAD_REQUEST
-   //       )
-   //    }
-   //    const isNewUser = await this.usersService.getUserByEmail(userDto.email)
-   //    if(isNewUser) {
-   //       throw new HttpException(
-   //          'Пользователь с таким email уже зарегистрирован', HttpStatus.BAD_REQUEST
-   //       )
-   //    }
-   //    const hashPassword = await bcrypt.hash(userDto.password || randomUUID(), 5)
-   //    const newUser = await this.usersService.addUser({ ...userDto, password: hashPassword })
-   //    return this.generateToken(newUser)
-   // }
 
    async sendPromo({ email }) {
       console.log('AuthService SendPromo')
@@ -75,6 +59,22 @@ export class AuthService {
       const { promocode } = await this.settingsService.getSettings()
       this.sendMail(email, promocode)
       return true
+   }
+
+   async sendNewPartnerNotify(data) {
+      this.mailerService.sendMail({
+         // to: 'den@pi-art.ru',
+         to: 'ru-tec@yandex.ru',
+         from: 'ru-tec@yandex.ru',
+         subject: `Заявка от партнёра ${data.companyType}`,
+         html: `Получена новая заявка\n<a href="${data.url}">${data.url}</a>\n${data.companyName}`
+       })
+       .then((success) => {
+         console.log(success)
+       })
+       .catch((err) => {
+         console.log(err)
+       })
    }
 
    public sendMail(email, promocode): void {

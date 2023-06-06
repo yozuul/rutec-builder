@@ -15,6 +15,7 @@ export function clearAutoFailureSelectors(
          troubleGroupsId.push(group.id)
       }
    }
+   // console.log(troubleGroupsId)
    if(selectors.value[cleanerGroupId]) { // Проверяем, отмечен ли чекбокс по id/индексу
       if(selectors.value[cleanerGroupId]?.length === 1) {
          troubleGroupActivator()

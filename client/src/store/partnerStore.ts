@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import {
-   getAllPartners, getPartner, addPartner, deletePartner, updatePartner, getAllCity, addCity
+   getAllPartners, getPartner, addPartner, deletePartner, updatePartner, getAllCity, addCity, findByCity, getCityForUser
 } from '~/services/partnerService'
 
 export const usePartnerStore = defineStore({
    id: 'partner',
    state: () => ({
-      partners: [],
+      partners: [] as any,
       cities: [],
+      usersCity: [],
+      usersPartners: [],
       currentPartner: null
    }),
    actions: {
@@ -37,8 +39,14 @@ export const usePartnerStore = defineStore({
       async fetchCity() {
          this.cities = await getAllCity() as any
       },
+      async getCityForUser() {
+         this.usersCity = await getCityForUser() as any
+      },
       async addCity(name: string) {
          return addCity(name) as any
+      },
+      async findByCity(name: string) {
+         this.usersPartners = await findByCity(name) as any
       },
    }
 })

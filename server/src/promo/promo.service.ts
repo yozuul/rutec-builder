@@ -22,6 +22,21 @@ export class PromoService implements OnModuleInit {
          where: { id: id }
       })
    }
+   async getRandom() {
+      console.log('PromoService getRandom')
+      const facts = await this.promoRepo.findAll({
+         where: { type: 'Факт' }, raw: true
+      })
+      const videos = await this.promoRepo.findAll({
+         where: { type: 'Видео' }, raw: true
+      })
+      const res = {
+         fact: facts[randomInt(0, facts.length)],
+         video: videos[randomInt(0, videos.length)],
+      }
+      res.fact.text = res.fact.text.replace(/\n/g, '<br>');
+      return res
+   }
    async addPromo(data, file) {
       let imageName = null
       if(data.type === 'Видео') {

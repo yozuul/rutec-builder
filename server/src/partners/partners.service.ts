@@ -1,6 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Op } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
 import { Partners, PartnersCity } from './models';
+import {AuthService} from 'src/auth/auth.service';
 
 @Injectable()
 export class PartnersService implements OnModuleInit {
@@ -9,6 +11,7 @@ export class PartnersService implements OnModuleInit {
       private readonly partnerRepo: typeof Partners,
       @InjectModel(PartnersCity)
       private readonly cityRepo: typeof PartnersCity,
+      private authService: AuthService
    ) {}
 
    async getAllPartners() {
@@ -27,7 +30,12 @@ export class PartnersService implements OnModuleInit {
       const formatedData = await this.formatData(data)
       try {
          console.log('Добавлен новый представитель', data.companyName)
-         return this.partnerRepo.create(formatedData)
+         const newPartner = await this.partnerRepo.create(formatedData)
+         if(data.offer) {
+            this.authService.sendNewPartnerNotify({
+               ...data, ...{ url: `https://dvaresursa.ru/admin/partners/${newPartner.id}` }
+            })
+         }
       } catch (error) {
          console.log(error)
          return error
@@ -76,6 +84,39 @@ export class PartnersService implements OnModuleInit {
          where: { name: name }
       })
    }
+   async findByCity(name) {
+      const city = await this.findCity(name)
+      return this.partnerRepo.findAll({
+         where: {
+            [Op.and]:[
+               { cityId: city.id },
+               { status: 'Одобрен' }
+            ]
+         }
+      })
+   }
+   async getCityForUser() {
+      const filtred = []
+      const allCity = await this.cityRepo.findAll({
+         raw: true
+      }) as any
+      for (let city of allCity) {
+         const checkParter = await this.partnerRepo.findOne({
+            where: {
+               [Op.and]: [
+                  { status: 'Одобрен' },
+                  { cityId: city.id },
+               ]
+            }
+         })
+         if(checkParter) {
+            filtred.push(city)
+         }
+      }
+      console.log(filtred)
+      return filtred
+   }
+
    async getAllCity() {
       const allCity = await this.cityRepo.findAll({
          raw: true

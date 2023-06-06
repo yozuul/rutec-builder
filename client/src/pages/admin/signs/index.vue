@@ -13,28 +13,35 @@
                </div>
             </template>
          </el-table-column>
-         <el-table-column label="Тип группы" width="150">
+         <el-table-column label="Позиция" width="110" align="center">
+            <template #default="scope">
+               <div>
+                  {{ scope.row.orderPosition }}
+               </div>
+            </template>
+         </el-table-column>
+         <el-table-column label="Тип группы" width="150" align="center">
             <template #default="scope">
                <div>
                   {{ scope.row.part }}
                </div>
             </template>
          </el-table-column>
-         <el-table-column label="Тип полей" width="150">
+         <el-table-column label="Тип полей" width="120" align="center">
             <template #default="scope">
                <div>
                   {{ scope.row.fieldsType }}
                </div>
             </template>
          </el-table-column>
-         <el-table-column label="Признаков" width="150">
+         <el-table-column label="Признаков" width="140" align="center">
             <template #default="scope">
                <div>
                   {{ scope.row.signs.length }}
                </div>
             </template>
          </el-table-column>
-         <el-table-column label="Неисправность" width="150">
+         <el-table-column label="Неисправность" width="150" align="center">
             <template #default="scope">
                <div v-if="!scope.row.trouble">Нет</div>
                <div v-else>Да</div>
