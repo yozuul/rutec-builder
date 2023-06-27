@@ -98,7 +98,7 @@ import {
 } from 'utils/anketa-rules'
 
 const useFetch = useFetchData()
-const newSigns = await useFetch.getAllSignGroup()
+let newSigns = ref([])
 // ----
 const selectors = ref([]); const inputs = ref([])
 // РЕКОМЕНДАЦИИ
@@ -116,14 +116,14 @@ const adminRec = ref(null)
 async function selectorsChangedHandler(fieldGroupId) {
    console.log('---\n');
    // При выборе "Работа двигателя не сопровождается никаким...", очищаем ранее выбранное
-   clearAutoFailureSelectors(selectors, block_WHEN_TROUBLE_group, newSigns)
+   clearAutoFailureSelectors(selectors, block_WHEN_TROUBLE_group, newSigns.value)
    // Блокировка выбора "Когда появились признаки", если не выбрана неисправность
-   block_WHEN_TROUBLE_sign_group(selectors, block_WHEN_TROUBLE_group, newSigns)
+   block_WHEN_TROUBLE_sign_group(selectors, block_WHEN_TROUBLE_group, newSigns.value)
    // // Очистка селекторов механизмов не относящихся к двигателю (выбор чего-то одного)
-   clearNotEnginePartSelectors(selectors, fieldGroupId, newSigns)
+   clearNotEnginePartSelectors(selectors, fieldGroupId, newSigns.value)
    // // Проверяем рекомендации на основе выбранных параметров
    const { recomended, exceptions, fields } = await handleCheckRecomendation(
-      inputs, selectors, newSigns
+      inputs, selectors, newSigns.value
    )
    // console.log('RECOMENDED:', ...recomended)
    // console.log('EXCEPTIONS:', ...exceptions)
@@ -158,13 +158,14 @@ function clearSelectors() {
 function goToPageHandler() {
    goToPage(btnRecomendationActive, urlToGo, productToGo)
 }
-onMounted(() => {
-   // console.log(newSigns)
-   // Ищем блок с функцией 'block'
-   const blockGroup = newSigns.find(signGroup => signGroup.function === 'block')
+onMounted(async () => {
+   newSigns.value = await useFetch.getAllSignGroup()
+   const blockGroup = newSigns.value.find(signGroup => signGroup.function === 'block')
    WHEN_TROUBLE_block_id.value = `.groupId_${blockGroup.id}`
-   document.querySelector(WHEN_TROUBLE_block_id.value).classList.add('disable')
-   // document.querySelector('.groupId_7').classList.remove('trouble')
+   const element = document.querySelector(WHEN_TROUBLE_block_id.value)
+   if(element) {
+      element.classList.add('disable')
+   }
 })
 </script>
 

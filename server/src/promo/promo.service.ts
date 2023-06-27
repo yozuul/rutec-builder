@@ -31,10 +31,16 @@ export class PromoService implements OnModuleInit {
          where: { type: 'Видео' }, raw: true
       })
       const res = {
-         fact: facts[randomInt(0, facts.length)],
-         video: videos[randomInt(0, videos.length)],
+         fact: null,
+         video: null,
       }
-      res.fact.text = res.fact.text.replace(/\n/g, '<br>');
+      if(facts.length > 0) {
+         res.fact = facts[randomInt(0, facts.length)]
+         res.fact.text = res.fact.text.replace(/\n/g, '<br>')
+      }
+      if(videos.length > 0) {
+         res.video = videos[randomInt(0, videos.length)]
+      }
       return res
    }
    async addPromo(data, file) {

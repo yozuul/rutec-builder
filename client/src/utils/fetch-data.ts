@@ -1,5 +1,5 @@
 const secrePass = { secret: 'sadfs8787sdfsjkksd' }
-const dev = true
+const dev = false
 const apiURL = {
    dev: 'http://localhost:4444/', prod: '/api/'
 }
@@ -100,11 +100,15 @@ export const getAllUsers = async (token: string | null | undefined) => {
    return data
 }
 export const getSettings = async (token: string | null | undefined) => {
-   return $fetch(`/settings/get`, {
-      baseURL: baseURL,
-      method: 'GET',
-      headers: authHeaders(token)
-   })
+   try {
+      return $fetch(`/settings/get`, {
+         baseURL: baseURL,
+         method: 'GET',
+         headers: authHeaders(token)
+      })
+   } catch (error) {
+      console.log(error)
+   }
 }
 export const updateSettings = async (data: any, token: string | null | undefined) => {
    return $fetch(`/settings/update`, {

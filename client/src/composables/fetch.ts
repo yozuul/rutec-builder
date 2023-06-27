@@ -138,11 +138,15 @@ export const useFetchData = defineStore('useFetchData', () => {
       return data
    }
    const getSettings = async () => {
-      return $fetch(`/settings/get`, {
-         baseURL: baseURL,
-         method: 'GET',
-         headers: authHeaders()
-      })
+      try {
+         return $fetch(`/settings/get`, {
+            baseURL: baseURL,
+            method: 'GET',
+            headers: authHeaders()
+         })
+      } catch (error) {
+         return false
+      }
    }
    const updateSettings = async (data: any) => {
       return $fetch(`/settings/update`, {

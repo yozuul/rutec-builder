@@ -30,6 +30,7 @@ export class PartnersService implements OnModuleInit {
       const formatedData = await this.formatData(data)
       try {
          console.log('Добавлен новый представитель', data.companyName)
+         await this.authService.sendPartnersFile(data)
          const newPartner = await this.partnerRepo.create(formatedData)
          if(data.offer) {
             this.authService.sendNewPartnerNotify({

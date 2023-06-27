@@ -1,14 +1,15 @@
+import { resolve } from 'path'
 import {
    Injectable, UnauthorizedException, HttpException, HttpStatus
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs'
 import { randomUUID } from 'crypto'
-import { MailerService } from '@nestjs-modules/mailer';
+import { MailerService } from '@nestjs-modules/mailer'
 
-import { UsersService } from '../users/users.service';
-import { CreateUserDto } from '../users/models/dto/create-user.dto';
-import { SettingsService } from 'src/settings/settings.service';
+import { UsersService } from '../users/users.service'
+import { CreateUserDto } from '../users/models/dto/create-user.dto'
+import { SettingsService } from 'src/settings/settings.service'
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,6 @@ export class AuthService {
       }
    }
 
-
    async sendPromo({ email }) {
       console.log('AuthService SendPromo')
       if(!email) {
@@ -59,6 +59,41 @@ export class AuthService {
       const { promocode } = await this.settingsService.getSettings()
       this.sendMail(email, promocode)
       return true
+   }
+
+
+   async sendPartnersFile(data) {
+      console.log(data.email)
+      const { companyType } = data
+      let filePath = ''
+      let messageText = '<p>Доброго дня.</p>'
+      messageText += '<p>В приложении к данному письму вы найдете условия сотрудничества с ООО "РУТЕК" и контактные данные сотрудника, ответственного за работу по вашему направлению, а так же актуальные цены на нашу продукцию.</p>'
+      messageText += '<p>С уважением, Лисенков Д.В., Директор ООО "РУТЕК".</p>'
+      if(companyType === 'Магазин') {
+         filePath = resolve('./data/KP_magaziny.pdf')
+      }
+      if(companyType === 'Автосервис') {
+         filePath = resolve('./data/KP_servisy.pdf')
+      }
+      this.mailerService.sendMail({
+         to: data.email,
+         // to: 'ru-tec@yandex.ru',
+         from: 'ru-tec@yandex.ru',
+         subject: `Коммерческое предложение от "РУТЕК"`,
+         html: messageText,
+         attachments: [
+            {
+               filename: 'Коммерческое предложение.pdf',
+               path: filePath
+           },
+         ]
+       })
+       .then((success) => {
+         console.log(success)
+       })
+       .catch((err) => {
+         console.log(err)
+       })
    }
 
    async sendNewPartnerNotify(data) {
@@ -79,18 +114,18 @@ export class AuthService {
 
    public sendMail(email, promocode): void {
       this.mailerService.sendMail({
-          to: email,
-          from: 'ru-tec@yandex.ru',
-          subject: '✔ Промокод на скидку от RUTEC',
-          text: '✔ Вы запросили промокод на скидку RUTEC',
-          html: `Ваш промокод на скидку 15% при покупке в интернет-магазине <a href="https://rutec-shop.ru/">https://rutec-shop.ru/</a> <b>${promocode}</b>`
-        })
-        .then((success) => {
-          console.log(success)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+         to: email,
+         from: 'ru-tec@yandex.ru',
+         subject: '✔ Промокод на скидку от RUTEC',
+         text: '✔ Вы запросили промокод на скидку RUTEC',
+         html: `Ваш промокод на скидку 15% при покупке в интернет-магазине <a href="https://rutec-shop.ru/">https://rutec-shop.ru/</a> <b>${promocode}</b>`
+      })
+      .then((success) => {
+      console.log(success)
+      })
+      .catch((err) => {
+      console.log(err)
+      })
     }
 
 //     public example2(): void {

@@ -32,8 +32,11 @@
 <script lang="ts" setup>
 import { usePartnerStore } from '~/store/partnerStore'
 const partnerStore = usePartnerStore()
-await partnerStore.getCityForUser()
-
+try {
+   await partnerStore.getCityForUser()
+} catch (error) {
+   console.log(error)
+}
 const selectedCity = ref('')
 const cityData = partnerStore.usersCity
 const cities = ref(cityData)

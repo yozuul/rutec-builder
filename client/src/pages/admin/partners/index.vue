@@ -93,8 +93,12 @@
 <script lang='ts' setup>
 import type { TableInstance } from 'element-plus'
 const partnerStore = usePartnerStore()
-await partnerStore.fetchAllPartners()
-await partnerStore.fetchCity()
+try {
+   await partnerStore.fetchAllPartners()
+   await partnerStore.fetchCity()
+} catch (error) {
+   console.log(error)
+}
 
 const cityFilterData: any = ref([])
 let citySet = new Set()

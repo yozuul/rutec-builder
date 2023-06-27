@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 <NuxtLayout>
    <PagesSignsAddEdit cardTitle="Новая группа признаков" />
 </NuxtLayout>
@@ -12,8 +12,8 @@
 </style>
 
 <script lang="ts">
-definePageMeta({
-   layout: 'dashboard',
-   middleware: 'auth'
-})
-</script>
+// definePageMeta({
+//    layout: 'dashboard',
+//    middleware: 'auth'
+// })
+</script> -->
