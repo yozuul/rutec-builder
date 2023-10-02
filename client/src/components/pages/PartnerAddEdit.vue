@@ -25,6 +25,21 @@
          </el-select>
       </el-form-item>
 
+      <el-form-item label="Страна" prop="country">
+         <el-select
+            v-model="ruleForm.country"
+            :placeholder="ruleForm.country ? ruleForm.country : 'Выберите страну'"
+            @change="checkVisiblity"
+            filterable
+         >
+            <el-option v-for="country in allCountries"
+               :key="country.id"
+               :label="country.name"
+               :value="country.name"
+            />
+         </el-select>
+      </el-form-item>
+
       <el-form-item label="Город" prop="city">
          <el-select
             v-model="ruleForm.city"
@@ -86,6 +101,10 @@
          <el-input v-model="ruleForm.employeePosition" placeholder="Занимаемая должность" />
       </el-form-item>
 
+      <el-form-item label="Количество авто" prop="companyAreas">
+         <el-input v-model="ruleForm.companyAreas" placeholder="шт" />
+      </el-form-item>
+
       <el-form-item label="Email" prop="email">
          <el-input v-model="ruleForm.email" placeholder="Электронная почта" />
       </el-form-item>
@@ -119,8 +138,10 @@
 import IMask from 'imask';
 import type { FormInstance, FormRules } from 'element-plus'
 const partnerStore = usePartnerStore()
+await partnerStore.fetchCountry()
 await partnerStore.fetchCity()
 const allCities: any = partnerStore.cities
+const allCountries: any = partnerStore.country
 
 const props = defineProps({
    cardTitle: { type: String },
@@ -130,10 +151,11 @@ const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
    companyName: '',
    companyType: '',
+   country: '',
    city: '',
    adress: '',
    newCityData: '',
-   companyAreas: '',
+   companyAreas: 10,
    experience: 0,
    companySpec: [],
    email: '',
@@ -163,8 +185,11 @@ function checkVisiblity() {
 onMounted(() => {
    if(props.partnerData) {
       const partner = props.partnerData
+      console.log('partner', partner);
+      // console.log(ruleForm.country);
       ruleForm.companyName = partner.companyName
       ruleForm.companyType = partner.companyType
+      ruleForm.country = partner.country.name
       ruleForm.city = partner.city.name
       ruleForm.adress = partner.adress
       ruleForm.companySpec = partner.companySpec
@@ -176,6 +201,7 @@ onMounted(() => {
       ruleForm.employeePosition = partner.employeePosition
       ruleForm.status = partner.status
       showHiddenCompanyFields()
+      console.log(partner);
    }
 
    const inputElement = document.querySelector('.phoneMask .el-input__inner') as HTMLElement

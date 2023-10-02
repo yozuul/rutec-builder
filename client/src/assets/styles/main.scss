@@ -43,6 +43,7 @@ main h1 {
    display: flex;
    flex-wrap: wrap;
    position: relative;
+   padding-right: 30px;
    order: 2;
    .el-checkbox, .el-radio {
       width: 100%;
@@ -267,4 +268,13 @@ main h1 {
 }
 .el-card {
    max-width: 1400px;
+}
+.headerLogo {
+   position: relative;
+   z-index: 1;
+   image {
+      @media (min-width: 450px) {
+         height: 70px;
+      }
+   }
 }

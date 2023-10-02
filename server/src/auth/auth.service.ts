@@ -66,14 +66,17 @@ export class AuthService {
       console.log(data.email)
       const { companyType } = data
       let filePath = ''
+      let pricePath = ''
       let messageText = '<p>Доброго дня.</p>'
       messageText += '<p>В приложении к данному письму вы найдете условия сотрудничества с ООО "РУТЕК" и контактные данные сотрудника, ответственного за работу по вашему направлению, а так же актуальные цены на нашу продукцию.</p>'
       messageText += '<p>С уважением, Лисенков Д.В., Директор ООО "РУТЕК".</p>'
       if(companyType === 'Магазин') {
          filePath = resolve('./data/KP_magaziny.pdf')
+         pricePath = resolve('./data/Price_na_RUTEC_dlya_Magazinov_bez_NDS_2023_Iyun_2.xlsx')
       }
       if(companyType === 'Автосервис') {
          filePath = resolve('./data/KP_servisy.pdf')
+         pricePath = resolve('./data/Price_na_RUTEC_dlya_Avtoservisov_bez_NDS_2023_Iyun_2.xlsx')
       }
       this.mailerService.sendMail({
          to: data.email,
@@ -85,6 +88,10 @@ export class AuthService {
             {
                filename: 'Коммерческое предложение.pdf',
                path: filePath
+           },
+            {
+               filename: 'Прайс лист.xlsx',
+               path: pricePath
            },
          ]
        })

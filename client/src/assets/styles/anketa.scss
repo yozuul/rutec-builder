@@ -3,6 +3,11 @@
    max-width: 300px;
 }
 .optionsGroup {
+   &.inputs {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+   }
    &.disable {
       opacity: .5;
       pointer-events: none;

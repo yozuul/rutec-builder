@@ -1,5 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, } from 'sequelize-typescript';
 import { PartnersCity } from './partners-city.model';
+import { PartnersCountry } from './partners-country.model';
 
 const { INTEGER, STRING } = DataType
 
@@ -25,6 +26,14 @@ export class Partners extends Model<Partners> {
 
    @BelongsTo(() => PartnersCity)
    city: PartnersCity;
+
+   @ForeignKey(() => PartnersCountry)
+   @Column({
+      type: INTEGER, allowNull: false
+   }) countryId: number;
+
+   @BelongsTo(() => PartnersCountry)
+   country: PartnersCountry;
 
    @Column({
       type: STRING, allowNull: false,

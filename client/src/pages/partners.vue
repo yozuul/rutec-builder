@@ -68,6 +68,11 @@
                <el-checkbox label="Все виды транспорта" name="type" />
             </el-checkbox-group>
          </el-form-item>
+
+         <el-form-item label="Количество авто" prop="companyAreas">
+            <el-input v-model="ruleForm.companyAreas" placeholder="шт" />
+         </el-form-item>
+
          <el-form-item v-if="fieldVisibility.companyEmployee"
             label="Представитель" prop="companyEmployee"
          >
@@ -99,6 +104,7 @@
             <el-checkbox
                v-model="ruleForm.accept"
                label="Согласие на обработку персональных данных" name="accept"
+               @change="rullesCheckboxHandler"
             />
          </el-form-item>
       </el-form>
@@ -140,6 +146,7 @@ const ruleForm = reactive({
    adress: '',
    newCityData: '',
    companyAreas: '',
+   countryId: 1,
    experience: 0,
    companySpec: [],
    email: '',
@@ -185,7 +192,9 @@ function showHiddenCompanyFields() {
       fieldVisibility.employeePosition = true
    }
 }
-
+function rullesCheckboxHandler() {
+   console.log(ruleForm.accept);
+}
 const rules = reactive<FormRules>({
    companyName: [
       { required: true, message: 'Название обязательно', trigger: 'blur' },
@@ -223,8 +232,9 @@ const rules = reactive<FormRules>({
 const submitForm = async (formEl: FormInstance | undefined) => {
    if (!formEl) return
    await formEl.validate(async (valid, fields) => {
-      if (valid) {
+      if (valid && ruleForm.accept) {
          try {
+            ruleForm.countryId = 1
             await partnerStore.addPartner(ruleForm)
             ElNotification({
                title: 'Готово',
@@ -240,6 +250,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             })
          }
       } else {
+         if (!ruleForm.accept) {
+            ElMessage.error('Необходимо ваше согласие')
+         }
          console.log('error submit!', fields)
       }
    })

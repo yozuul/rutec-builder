@@ -24,7 +24,7 @@ const isValid = await useFecth.validateUser()
 if(props.recomendation) {
    showRec.value = true
 }
-console.log(props.recomendation)
+// console.log(props.recomendation)
 </script>
 
 <style lang="scss">

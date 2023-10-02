@@ -28,6 +28,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
 const route = useRoute()
 const activeIndex = ref('0')
+
 watchEffect(() => {
    switch(route.path) {
       case '/':
@@ -49,5 +50,10 @@ watchEffect(() => {
    position: absolute;
    bottom: -200px;
    right: 30px;
+   z-index: 1;
+   @media (max-width: 450px) {
+      height: 70px;
+      bottom: -155px;
+   }
 }
 </style>

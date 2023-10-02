@@ -2,7 +2,7 @@ import { resolve } from 'node:path'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { TelegrafModule } from 'nestjs-telegraf'
+// import { TelegrafModule } from 'nestjs-telegraf'
 import * as LocalSession from 'telegraf-session-local'
 import { MailerModule } from '@nestjs-modules/mailer'
 

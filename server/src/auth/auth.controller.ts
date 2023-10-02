@@ -11,20 +11,20 @@ export class AuthController {
 
    @Post('login')
    login(@Body() authData) {
-      console.log('AuthController Login authData', authData)
+      // console.log('AuthController Login authData', authData)
       return this.authService.login(authData)
    }
 
    @UseGuards(JwtAuthGuard)
    @Post('validateUser')
    validateUser(@Body() token) {
-      console.log('AuthController ValidateUser', token)
+      // console.log('AuthController ValidateUser', token)
       return true
    }
 
    @Post('sendPromo')
    registration(@Body() email) {
-      console.log(email)
+      // console.log(email)
       return this.authService.sendPromo(email)
    }
 

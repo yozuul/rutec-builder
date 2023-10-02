@@ -1,16 +1,23 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
-import { Partners, PartnersCity } from './models';
-import {AuthService} from 'src/auth/auth.service';
+import { Partners, PartnersCity, PartnersCountry, CityToCountry } from './models';
+import { AuthService } from 'src/auth/auth.service';
+import { Users } from 'src/users/models/users.model';
 
 @Injectable()
 export class PartnersService implements OnModuleInit {
    constructor(
+      @InjectModel(Users)
+      private readonly usersRepo: typeof Users,
       @InjectModel(Partners)
       private readonly partnerRepo: typeof Partners,
       @InjectModel(PartnersCity)
       private readonly cityRepo: typeof PartnersCity,
+      @InjectModel(PartnersCountry)
+      private readonly countryRepo: typeof PartnersCountry,
+      @InjectModel(CityToCountry)
+      private readonly cityToCountryRepo: typeof CityToCountry,
       private authService: AuthService
    ) {}
 
@@ -22,7 +29,7 @@ export class PartnersService implements OnModuleInit {
    async getPartnerById(id) {
       const data = await this.partnerRepo.findOne({
          where: { id: id },
-         include: [PartnersCity]
+         include: [PartnersCity, PartnersCountry]
       })
       return data
    }
@@ -34,7 +41,9 @@ export class PartnersService implements OnModuleInit {
          const newPartner = await this.partnerRepo.create(formatedData)
          if(data.offer) {
             this.authService.sendNewPartnerNotify({
-               ...data, ...{ url: `https://dvaresursa.ru/admin/partners/${newPartner.id}` }
+               ...data, ...{
+                  url: `https://dvaresursa.ru/admin/partners/${newPartner.id}`
+               }
             })
          }
       } catch (error) {
@@ -64,15 +73,77 @@ export class PartnersService implements OnModuleInit {
          return error
       }
    }
+   async deleteUser(id) {
+      await this.usersRepo.destroy({
+         where: { id: id }
+      })
+   }
    async editPartner(id, data) {
       const formatedData = await this.formatData(data)
       console.log('Представитель', data.companyName, 'обновлён')
+      console.log(formatedData);
+      const country = await this.countryRepo.findOne({
+         where: {
+            name: data.country
+         }
+      })
+      formatedData.countryId = country.id
       await this.partnerRepo.update(formatedData, {
           where: { id: id }
       })
       return this.partnerRepo.findOne({
          where: { id: id },
-         include: [PartnersCity]
+         include: [PartnersCity, PartnersCountry]
+      })
+   }
+   // СТРАНЫ
+   async getAllCountry() {
+      const allCountry = await this.countryRepo.findAll({
+         raw: true
+      }) as any
+      allCountry.unshift({ id: 0, name: 'Новая страна' })
+      return allCountry
+   }
+   async addCountry(countryName) {
+      console.log('Добавлена новая страна', countryName)
+      return this.countryRepo.create({
+         name: countryName
+      })
+   }
+   async getCityByCountry() {
+      const filtred = []
+      const allCountry = await this.cityRepo.findAll({
+         raw: true
+      }) as any
+      for (let country of allCountry) {
+         const checkParter = await this.partnerRepo.findOne({
+            where: {
+               [Op.and]: [
+                  { status: 'Одобрен' },
+                  { cityId: country.id },
+               ]
+            }
+         })
+         if(checkParter) {
+            filtred.push(country)
+         }
+      }
+      console.log('allCountry', allCountry);
+      return filtred
+   }
+
+   // ГОРОДА
+   async getAllCity() {
+      const allCity = await this.cityRepo.findAll({
+         raw: true
+      }) as any
+      allCity.unshift({ id: 0, name: 'Новый город' })
+      return allCity
+   }
+   async addCity(cityName) {
+      console.log('Добавлен новый город', cityName)
+      return this.cityRepo.create({
+         name: cityName
       })
    }
    async findCityById(id) {
@@ -96,6 +167,39 @@ export class PartnersService implements OnModuleInit {
          }
       })
    }
+   async findByCityByData({ country, city, type }: any) {
+      if(type === 'Любая деятельность') {
+         return this.partnerRepo.findAll({
+            where: {
+               [Op.and]:[
+                  { cityId: city },
+                  { countryId: country },
+                  { status: 'Одобрен' }
+               ]
+            }
+         })
+      }
+      else {
+         return this.partnerRepo.findAll({
+            where: {
+               [Op.and]:[
+                  { cityId: city },
+                  { countryId: country },
+                  { companyType: type },
+                  { status: 'Одобрен' }
+               ]
+            }
+         })
+      }
+   }
+   async findCityByCountry(countryId) {
+      return this.cityToCountryRepo.findAll({
+         where: {
+            countryId: countryId
+         },
+         include: [PartnersCity, PartnersCountry]
+      })
+   }
    async getCityForUser() {
       const filtred = []
       const allCity = await this.cityRepo.findAll({
@@ -114,26 +218,12 @@ export class PartnersService implements OnModuleInit {
             filtred.push(city)
          }
       }
-      console.log(filtred)
       return filtred
-   }
-
-   async getAllCity() {
-      const allCity = await this.cityRepo.findAll({
-         raw: true
-      }) as any
-      allCity.unshift({ id: 0, name: 'Новый город' })
-      return allCity
-   }
-   async addCity(cityName) {
-      console.log('Добавлен новый город', cityName)
-      return this.cityRepo.create({
-         name: cityName
-      })
    }
    async formatData(data) {
       // companySpec - массив чекбоксов - переводим в строку
       data.companySpec = JSON.stringify(data.companySpec)
+      console.log(data);
       let existCity = null
       // Если поле newCityData заполнено, проверяем что этого города уже нет, и если нет, то добавляем
       if(data.newCityData) {
@@ -157,18 +247,36 @@ export class PartnersService implements OnModuleInit {
       if(isCityExist.length === 0) {
          await this.cityRepo.bulkCreate(this.defaultCity)
       }
-      const isPartnersExist = await this.partnerRepo.findAll()
-      if(isPartnersExist.length === 0) {
-         try {
-            await this.partnerRepo.bulkCreate(this.defaultPartners)
-         } catch (error) {
-            console.log(error)
-         }
+      const isCountryExist = await this.countryRepo.findAll()
+      if(isCountryExist.length === 0) {
+         await this.countryRepo.bulkCreate(this.defaultCountry)
       }
+      const cityToCountryExist = await this.cityToCountryRepo.findAll()
+      if(cityToCountryExist.length === 0) {
+         await this.cityToCountryRepo.bulkCreate(this.defaultCityToCountry)
+      }
+      // const isPartnersExist = await this.partnerRepo.findAll()
+      // if(isPartnersExist.length === 0) {
+      //    try {
+      //       await this.partnerRepo.bulkCreate(this.defaultPartners)
+      //    } catch (error) {
+      //       console.log(error)
+      //    }
+      // }
+   }
+   get defaultCityToCountry() {
+      return [
+         { cityId: 12, countryId: 1 }, { cityId: 16, countryId: 1 }, { cityId: 17, countryId: 1 }, { cityId: 18, countryId: 1 }, { cityId: 19, countryId: 1 }, { cityId: 20, countryId: 1 }, { cityId: 21, countryId: 1 }, { cityId: 22, countryId: 1 }, { cityId: 23, countryId: 1 },
+      ]
    }
    get defaultCity() {
       return [
          { name: 'Москва'}, { name: 'Санкт-Петербург'}, { name: 'Новосибирск'}, { name: 'Екатеринбург'}, { name: 'Казань'}, { name: 'Нижний Новгород'}, { name: 'Красноярск'}, { name: 'Челябинск'}, { name: 'Самара'},
+      ]
+   }
+   get defaultCountry() {
+      return [
+         { name: 'Россия' }, { name: 'Беларусь' }, { name: 'Казахстан' }
       ]
    }
    get defaultPartners() {

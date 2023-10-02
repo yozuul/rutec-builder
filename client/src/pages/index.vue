@@ -3,18 +3,21 @@
 <main class="anketa_wrapper">
    <div class="anketa">
       <PagesSelectCity />
-      <div v-for="(fieldGroup, index) in newSigns" :key="index"
+      <!-- {{ newSigns }} -->
+      <div v-for="(fieldGroup, index) in newSignsRef" :key="index"
          :class="['optionsGroup',
             {
                inputs: fieldGroup.fieldsType === 'input',
                trouble: fieldGroup.trouble,
             },
-            'groupId_' + fieldGroup.id,
+            // `groupId_${fieldGroup.id}`,
          ]"
+         style="display: flex; flex-wrap: wrap; margin-bottom: 15px;"
       >
-         <h3>{{ fieldGroup.name }}</h3>
+         <h3 style="width: 100%;">{{ fieldGroup.name }}</h3>
+         <div class="idNumirate" style="display: none;">{{ fieldGroup.id }}</div>
          <template v-if="fieldGroup.fieldsType == 'input'">
-            <div v-for="field in fieldGroup.signs" class="inputGroup">
+            <div v-for="field in fieldGroup.signs" style="padding-right: 10px;" class="inputGroup">
                {{ field.name }} <sup v-if="field.required"> * </sup>
                <template v-if="field.type == 'number'">
                   <el-input
@@ -88,6 +91,7 @@
    </div>
 </main>
 </template>
+<!--  -->
 <script setup>
 import { Refresh } from '@element-plus/icons-vue'
 import { handleCheckRecomendation } from 'utils'
@@ -98,7 +102,23 @@ import {
 } from 'utils/anketa-rules'
 
 const useFetch = useFetchData()
-let newSigns = ref([])
+let newSigns = []
+let newSignsRef = ref()
+try {
+   newSigns = await useFetch.getAllSignGroup()
+   newSignsRef.value = newSigns
+} catch (error) {
+   console.log(error)
+}
+// if(newSigns.length === 0) {
+//    try {
+//       const res = await fetch('/api/signs/all')
+//       newSigns = await res.json()
+//    } catch (error) {
+//       console.log(error)
+//    }
+// }
+// console.log(newSigns)
 // ----
 const selectors = ref([]); const inputs = ref([])
 // РЕКОМЕНДАЦИИ
@@ -116,14 +136,14 @@ const adminRec = ref(null)
 async function selectorsChangedHandler(fieldGroupId) {
    console.log('---\n');
    // При выборе "Работа двигателя не сопровождается никаким...", очищаем ранее выбранное
-   clearAutoFailureSelectors(selectors, block_WHEN_TROUBLE_group, newSigns.value)
+   clearAutoFailureSelectors(selectors, block_WHEN_TROUBLE_group, newSigns)
    // Блокировка выбора "Когда появились признаки", если не выбрана неисправность
-   block_WHEN_TROUBLE_sign_group(selectors, block_WHEN_TROUBLE_group, newSigns.value)
-   // // Очистка селекторов механизмов не относящихся к двигателю (выбор чего-то одного)
-   clearNotEnginePartSelectors(selectors, fieldGroupId, newSigns.value)
-   // // Проверяем рекомендации на основе выбранных параметров
+   block_WHEN_TROUBLE_sign_group(selectors, block_WHEN_TROUBLE_group, newSigns)
+   // Очистка селекторов механизмов не относящихся к двигателю (выбор чего-то одного)
+   clearNotEnginePartSelectors(selectors, fieldGroupId, newSigns)
+   // Проверяем рекомендации на основе выбранных параметров
    const { recomended, exceptions, fields } = await handleCheckRecomendation(
-      inputs, selectors, newSigns.value
+      inputs, selectors, newSigns
    )
    // console.log('RECOMENDED:', ...recomended)
    // console.log('EXCEPTIONS:', ...exceptions)
@@ -158,15 +178,30 @@ function clearSelectors() {
 function goToPageHandler() {
    goToPage(btnRecomendationActive, urlToGo, productToGo)
 }
-onMounted(async () => {
-   newSigns.value = await useFetch.getAllSignGroup()
-   const blockGroup = newSigns.value.find(signGroup => signGroup.function === 'block')
-   WHEN_TROUBLE_block_id.value = `.groupId_${blockGroup.id}`
-   const element = document.querySelector(WHEN_TROUBLE_block_id.value)
-   if(element) {
-      element.classList.add('disable')
+function nums() {
+   const blocks = document.querySelectorAll('.idNumirate')
+   for (let block of  blocks) {
+      const id = block.innerText
+      const parentBlock = block.parentNode
+      // console.log(id);
+      parentBlock.classList.add(`groupId_${id}`)
    }
+}
+onMounted(() => {
+   // console.log(newSigns)
+   // Ищем блок с функцией 'block'
+   nums()
+   const blockGroup = newSigns.find(signGroup => signGroup.function === 'block')
+   WHEN_TROUBLE_block_id.value = `.groupId_${blockGroup.id}`
+   console.log(WHEN_TROUBLE_block_id.value);
+   document.querySelector(WHEN_TROUBLE_block_id.value).classList.add('disable')
+   // (() => {
+      // const blocks = document.querySelector('idNumirate')
+      // console.log(blocks);
+   // })()
+   // document.querySelector('.groupId_7').classList.remove('trouble')
 })
+
 </script>
 
 <style lang="scss">

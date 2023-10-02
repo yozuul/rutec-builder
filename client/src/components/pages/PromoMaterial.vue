@@ -3,7 +3,7 @@
    <el-card class="box-card">
       <template #header>
          <div class="card-header">
-         <span>Факты о РУТЕК</span>
+         <span>Полезная информация от Рутек</span>
          <span><h4>{{ fact.name }}</h4></span>
          </div>
       </template>

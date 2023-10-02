@@ -32,12 +32,19 @@
          </el-table-column>
          <el-table-column label="Управление" width="130">
             <template #default="scope">
+
+
                <nuxt-link :to="`/admin/users/${scope.row.id}`">
                   <el-button size="small">
                      <el-icon><edit /></el-icon>
                   </el-button>
                </nuxt-link>
-               <DeleteWithConfirm @click="handleDelete(scope.row.id)" />
+               <el-button class="deleteProductBtn"
+                  size="small" type="danger"
+                  @click="deleteConfirm(scope.row.id)"
+               >
+                  <el-icon><delete /></el-icon>
+               </el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -47,20 +54,45 @@
 
 <script lang='ts' setup>
 import { getAllUsers } from 'utils'
+import { usePartnerStore } from '~/store/partnerStore'
 import { Delete, Edit } from '@element-plus/icons-vue'
 const usersData = ref([])
 const useToken = useCookie('accessToken')
 const data = await getAllUsers(useToken.value)
+const partnerStore = usePartnerStore()
 if(!data.users) {
    notifyError({ message: data.error })
 } else {
    usersData.value = data.users
 }
-async function handleDelete(id: number) {
-   // productData.value = productData.value.filter((product: any) => product.id !== id)
-   // await deleteProduct(id)
-}
 
+const deleteConfirm = async (id: number) => {
+   try {
+      await ElMessageBox.confirm(
+         'Уверены, что хотите удалить пользователя?', 'Внимание!',
+         {
+            cancelButtonText: 'Отмена',
+            confirmButtonText: 'OK',
+            type: 'warning',
+         }
+      )
+      try {
+         await partnerStore.deleteUser(id)
+         usersData.value = usersData.value.filter((user: any) => user.id !== id)
+         ElMessage({
+            type: 'success',
+            message: `Пользователь с ID ${id} удалён`,
+         })
+      } catch (error) {
+         ElMessage({
+            type: 'error',
+            message: `При удалении пользователя с ID ${id}  возникла ошибка`,
+         })
+      }
+   } catch (error) {
+      console.log('Удаление отменено')
+   }
+}
 </script>
 
 <style>

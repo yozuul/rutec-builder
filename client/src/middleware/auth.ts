@@ -1,4 +1,5 @@
 import { validateUser } from '../utils/fetch-data'
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
    const router = useRouter()
    const useToken = useCookie('accessToken')
