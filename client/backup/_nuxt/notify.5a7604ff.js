@@ -1,1 +1,0 @@
-import"./base.4b6264ad.js";import{E as e}from"./el-notification.56476da9.js";const n=s=>{e({title:(s==null?void 0:s.title)||"Готово",message:(s==null?void 0:s.message)||"Товар успешно добавлен",type:"success"})},r=s=>{e({title:(s==null?void 0:s.title)||"Ошибка",message:(s==null?void 0:s.message)||"Заполните обязательные поля",type:"warning"})};export{n as a,r as n};

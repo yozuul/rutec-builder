@@ -1,1 +1,0 @@
-import{u as e}from"./cookie.1208391b.js";import"./entry.dd0ef4c2.js";const o={dev:"http://localhost:4444",prod:"/api"},n={get baseURL(){return o.prod},get userToken(){return e("accessToken").value},get authHeader(){return this.userToken?{authorization:"Bearer "+this.userToken}:{authorization:"NoToken"}}};export{n as a};

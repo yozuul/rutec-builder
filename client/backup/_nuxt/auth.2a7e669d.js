@@ -1,1 +1,0 @@
-import{E as o}from"./el-main.d9d6408e.js";import"./base.4b945391.js";import{y as a,k as n,f as s,e as _,o as r,G as c}from"./entry.95ec977b.js";const l={},u={class:"auth-layout"};function i(e,d){const t=o;return r(),n("div",u,[s(t,null,{default:_(()=>[c(e.$slots,"default")]),_:3})])}const h=a(l,[["render",i]]);export{h as default};
